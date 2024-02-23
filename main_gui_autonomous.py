@@ -187,19 +187,25 @@ class CodeRefiner:
             update_callback(f"Error refining code: {str(e)}")
             return ""
 
+    
+
+
+
+
+
 
 class Application:
     def __init__(self, master):
         self.master = master
         master.title("DrLordBasil's AI Development Assistant")
 
-        # Load the background image
-        self.background_image = PhotoImage(file="background.png")  # Make sure this points to the correct file path
+        
+        self.background_image = PhotoImage(file="background.png")  
         self.background_label = Label(master, image=self.background_image)
         self.background_label.place(x=0, y=0, relwidth=1, relheight=1)
 
-        # Assuming logo.png is the logo file in the same directory as this script
-        self.logo_image = PhotoImage(file="logo.png")  # Update path to your logo image
+        
+        self.logo_image = PhotoImage(file="logo.png")  
         self.logo_label = Label(master, image=self.logo_image)
         self.logo_label.pack(side="top", pady=10)
 
@@ -214,19 +220,23 @@ class Application:
         self.code_exec = CodeExecutor()
         self.code_refiner = CodeRefiner()
 
-        self.generate_idea_button = Button(master, text="Generate Project Idea", command=self.generate_idea)
+        self.generate_idea_button = Button(master, text="Generate Project Idea and initial script", command=self.generate_idea)
         self.generate_idea_button.pack(pady=5)
 
-        self.execute_code_button = Button(master, text="Execute Code", command=self.execute_code)
+        self.execute_code_button = Button(master, text="Execute current Code", command=self.execute_code)
         self.execute_code_button.pack(pady=5)
 
-        self.refine_code_button = Button(master, text="Refine Code", command=self.refine_code)
+        self.refine_code_button = Button(master, text="Refine Current Code", command=self.refine_code)
         self.refine_code_button.pack(pady=5)
         
-        self.save_final_code_button = Button(master, text="Save Final Code", command=self.save_final_code)
+        self.save_final_code_button = Button(master, text="Save current code as Final Code", command=self.save_final_code)
         self.save_final_code_button.pack(pady=5)
-        
-        self.current_code = ""  # To store the current code
+
+        self.auto_generate_button = Button(master, text="Auto Generate Program on Idea generated", command=self.on_auto_generate_button_click)
+        self.auto_generate_button.pack(pady=5)
+
+        self.current_idea = ""
+        self.current_code = ""  
         self.current_feedback = ""
 
     def log_message(self, message):
@@ -262,8 +272,33 @@ class Application:
         messagebox.showinfo("Info", "Final code saved as final_code.py")
 
 
-# Create an instance of the Application class
+    def auto_generate(self):
+        t1 = threading.Thread(target=self._generate_idea_and_code)
+        t1.start()
+        t1.join()
+        self.log_message("Idea gen complete.")
+
+        t2 = threading.Thread(target=self.refine_code)
+        t2.start()
+        t2.join()
+        self.log_message("Refinement complete.")
+
+        t3 = threading.Thread(target=self.execute_code)
+        t3.start()
+        t3.join()
+        self.log_message("Execution complete.")
+
+        t4 = threading.Thread(target=self.save_final_code)
+        t4.start()
+        t4.join()
+        self.log_message("Save complete.")
+
+        self.log_message("Auto generation complete.")
+    def on_auto_generate_button_click(self):
+        threading.Thread(target=self.auto_generate).start()
+
 if __name__ == "__main__":
     root = Tk()
     app = Application(root)
+    
     root.mainloop()
