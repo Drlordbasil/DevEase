@@ -2,7 +2,7 @@ import subprocess
 import threading
 from tkinter import Tk, Text, Scrollbar, Button, END, messagebox, VERTICAL, PhotoImage, Label
 import logging
-from openai import OpenAI  #latest openai client
+from openai import OpenAI  # Assuming correct setup and import
 import re
 
 # Setup basic configuration for logging
@@ -10,7 +10,24 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 
 # Initialize OpenAI
 openai = OpenAI()
+def extract_imports_from_code(code):
+    """
+    Extracts the import statements from a given Python code.
 
+    Args:
+        code: The Python code to extract the imports from.
+
+    Returns:
+        A list of strings containing the import statements.
+    """
+
+    # Define the regular expression pattern for matching import statements
+    pattern = r"^\s*import\s+.*$|^\s*from\s+.*\s+import\s+.*$"
+
+    # Find all the import statements in the code
+    imports = re.findall(pattern, code, re.MULTILINE)
+
+    return imports
 def extract_code(text):
     """
     Extracts Python code from a given text.
@@ -151,12 +168,15 @@ class CodeCreator:
 
 class CodeExecutor:
     def execute_code(self, code, update_callback):
+        imports = extract_imports_from_code(code)
         try:
             with open("temp_code.py", "w") as file:
                 file.write(code)
-            result = subprocess.run(["python", "temp_code.py"], capture_output=True, text=True, timeout=5)
+            subprocess.run(["pip", "install", imports], capture_output=True, text=True)
+            result = subprocess.run(["python", "temp_code.py"], capture_output=True, text=True, timeout=15)
             if result.returncode == 0:
                 update_callback(f"Execution Output: {result.stdout}")
+            
             else:
                 update_callback(f"Execution Error: {result.stderr}")
         except subprocess.TimeoutExpired:
@@ -197,19 +217,19 @@ class CodeRefiner:
 class Application:
     def __init__(self, master):
         self.master = master
-        master.title("DrLordBasil's AI Development Assistant")
+        master.title("DevEase: Streamlining Development with Ease")
 
         
         self.background_image = PhotoImage(file="background.png")  
         self.background_label = Label(master, image=self.background_image)
         self.background_label.place(x=0, y=0, relwidth=1, relheight=1)
-
+ 
         
         self.logo_image = PhotoImage(file="logo.png")  
         self.logo_label = Label(master, image=self.logo_image)
         self.logo_label.pack(side="top", pady=10)
 
-        self.log = Text(master, height=20, width=100)
+        self.log = Text(master, height=25, width=100, wrap="word")
         self.scrollbar = Scrollbar(master, command=self.log.yview, orient=VERTICAL)
         self.log.configure(yscrollcommand=self.scrollbar.set, bg="white", fg="black")
         self.log.pack(side="left", fill="y")
