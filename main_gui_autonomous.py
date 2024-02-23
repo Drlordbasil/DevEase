@@ -160,7 +160,7 @@ class CodeExecutor:
             else:
                 update_callback(f"Execution Error: {result.stderr}")
         except subprocess.TimeoutExpired:
-            update_callback("Code execution timed out.")
+            update_callback(f"Code execution timed out.{result.stdout}")
         except Exception as e:
             update_callback(f"An error occurred: {str(e)}")
 
@@ -222,7 +222,10 @@ class Application:
 
         self.refine_code_button = Button(master, text="Refine Code", command=self.refine_code)
         self.refine_code_button.pack(pady=5)
-
+        
+        self.save_final_code_button = Button(master, text="Save Final Code", command=self.save_final_code)
+        self.save_final_code_button.pack(pady=5)
+        
         self.current_code = ""  # To store the current code
         self.current_feedback = ""
 
@@ -250,7 +253,13 @@ class Application:
             return
         threading.Thread(target=self.code_refiner.refine_code, args=(self.current_code, self.current_feedback, self.log_message)).start()
 
-
+    def save_final_code(self):
+        if not self.current_code.strip():
+            messagebox.showinfo("Info", "No code available to save.")
+            return
+        with open("final_code.py", "w") as file:
+            file.write(self.current_code)
+        messagebox.showinfo("Info", "Final code saved as final_code.py")
 
 
 # Create an instance of the Application class
