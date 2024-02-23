@@ -2,7 +2,7 @@ import subprocess
 import threading
 from tkinter import Tk, Text, Scrollbar, Button, END, messagebox, VERTICAL, PhotoImage, Label
 import logging
-from openai import OpenAI  # Assuming correct setup and import
+from openai import OpenAI  #latest openai client
 import re
 
 # Setup basic configuration for logging
