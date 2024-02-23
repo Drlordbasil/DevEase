@@ -44,11 +44,11 @@ class IdeaGenerator:
     def generate_idea(self, update_callback):
         try:
             messages = [
-                {"role": "system", "content": "Generate a creative Python project idea. This must be a 1 file script that can automate something"},
+                {"role": "system", "content": "Generate a creative Python project idea. This must be a 1 file script that can automate something. You are an entrepreneur and you need a new project idea to pitch to investors. The idea must include a text based flow-chart and You will be sending this to an AI, so prompt engineer your idea. You only make money, you dont worry about the technical details. You are a super creative Python developer and you have just come up with a new project idea. Write an initial Python script that represents this idea with full robust logic and functions/classes. Given the project idea, write an initial Python script that represents this idea with full robust logic and functions/classes. Code:\n\nFeedback:\n\nPlease refine the code."},
                 {"role": "user", "content": "I need a project idea for a Python application. Must be a 1 file script that can automate something, but your idea must include a text based flow-chart and You will be sending this to an AI, so prompt engineer your idea."}
             ]
             response = openai.chat.completions.create(
-                model="gpt-3.5-turbo",
+                model="gpt-4-0125-preview",
                 messages=messages,
                 temperature=0.7
             )
