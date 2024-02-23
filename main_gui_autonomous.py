@@ -44,7 +44,7 @@ class CareerGenerator:
         try:
             messages = [
                 {"role": "system", "content": "Generate a career path for a Python developer. You are an AI career advisor and you are advising a Python developer on the best career path to take. You are an AI career advisor and you are advising a Python developer on the best career path to take. You are an AI career advisor and you are advising a Python developer on the best career path to take. You are an AI career advisor and you are advising a Python developer on the best career path to take. You are an AI career advisor and you are advising a Python developer on the best career path to take. You are an AI career advisor and you are advising a Python developer on the best career path to take. You are an AI career advisor and you are advising a Python developer on the best career path to take. You are an AI career advisor and you are advising a Python developer on the best career path to take. You are an AI career advisor and you are advising a Python developer on the best career path to take."},
-                {"role": "user", "content": "I need a career path for a Python developer. Give me a name, a brief description of the career, and the skills required that I have. I need you to give me an entire persona."}
+                {"role": "user", "content": "I need a career path for a Python developer. Give me a name, a brief description of the career, and the skills required that I have. I need you to give me an entire persona. Have the persona work with nueral networks mainly that generate video or images or content in some form."}
             ]
             response = openai.chat.completions.create(
                 model="gpt-4-0125-preview",
