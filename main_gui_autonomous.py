@@ -193,6 +193,11 @@ class Application:
         self.master = master
         master.title("DrLordBasil's AI Development Assistant")
 
+        # Load the background image
+        self.background_image = PhotoImage(file="background.png")  # Make sure this points to the correct file path
+        self.background_label = Label(master, image=self.background_image)
+        self.background_label.place(x=0, y=0, relwidth=1, relheight=1)
+
         # Assuming logo.png is the logo file in the same directory as this script
         self.logo_image = PhotoImage(file="logo.png")  # Update path to your logo image
         self.logo_label = Label(master, image=self.logo_image)
