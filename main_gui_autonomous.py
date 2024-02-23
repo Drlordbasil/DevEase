@@ -36,15 +36,37 @@ def extract_code(text):
 
     return code
 
+class CareerGenerator:
+    def __init__(self):
+        pass
 
+    def generate_career(self, update_callback):
+        try:
+            messages = [
+                {"role": "system", "content": "Generate a career path for a Python developer. You are an AI career advisor and you are advising a Python developer on the best career path to take. You are an AI career advisor and you are advising a Python developer on the best career path to take. You are an AI career advisor and you are advising a Python developer on the best career path to take. You are an AI career advisor and you are advising a Python developer on the best career path to take. You are an AI career advisor and you are advising a Python developer on the best career path to take. You are an AI career advisor and you are advising a Python developer on the best career path to take. You are an AI career advisor and you are advising a Python developer on the best career path to take. You are an AI career advisor and you are advising a Python developer on the best career path to take. You are an AI career advisor and you are advising a Python developer on the best career path to take."},
+                {"role": "user", "content": "I need a career path for a Python developer. Give me a name, a brief description of the career, and the skills required that I have. I need you to give me an entire persona."}
+            ]
+            response = openai.chat.completions.create(
+                model="gpt-4-0125-preview",
+                messages=messages,
+                temperature=0.7
+            )
+            career = response.choices[0].message.content
+            update_callback(f"Generated Career: {career}")
+            return career
+        except Exception as e:
+            update_callback(f"Error generating career: {str(e)}")
+            return ""
 class IdeaGenerator:
     def __init__(self):
         pass
 
     def generate_idea(self, update_callback):
+        career = CareerGenerator().generate_career(update_callback)
+        
         try:
             messages = [
-                {"role": "system", "content": "Generate a creative Python project idea. This must be a 1 file script that can automate something. You are an entrepreneur and you need a new project idea to pitch to investors. The idea must include a text based flow-chart and You will be sending this to an AI, so prompt engineer your idea. You only make money, you dont worry about the technical details. You are a super creative Python developer and you have just come up with a new project idea. Write an initial Python script that represents this idea with full robust logic and functions/classes. Given the project idea, write an initial Python script that represents this idea with full robust logic and functions/classes. Code:\n\nFeedback:\n\nPlease refine the code."},
+                {"role": "system", "content": career},
                 {"role": "user", "content": "I need a project idea for a Python application. Must be a 1 file script that can automate something, but your idea must include a text based flow-chart and You will be sending this to an AI, so prompt engineer your idea."}
             ]
             response = openai.chat.completions.create(
