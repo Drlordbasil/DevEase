@@ -361,6 +361,7 @@ class Application:
         self.feedback_text, self.feedback_scrollbar = self.setup_labeled_text_area("Current Feedback", 2, 2)
 
 
+
     def setup_labeled_text_area(self, label_text, row, column):
         frame = Frame(self.master)
         label = Label(frame, text=label_text)
@@ -391,19 +392,20 @@ class Application:
 
     def generate_idea(self):
         threading.Thread(target=self._generate_idea_and_code).start()
-        self.update_text_area(self.idea_text, self.current_idea)
-        self.current_idea = self.idea_gen.generate_idea(self.log_message)
 
     def _generate_idea_and_code(self):
         idea = self.idea_gen.generate_idea(self.log_message)
         if idea:
+            self.current_idea = idea  # Make sure to update self.current_idea
+            self.update_text_area(self.idea_text, self.current_idea)  # Now update the text area
             self.current_code = self.code_creator.create_initial_code(idea, self.log_message)
             self.current_feedback = self.code_exec.execute_code(self.current_code, self.log_message)
-            self.update_text_area(self.idea_text, self.current_idea)
             self.update_text_area(self.code_text, self.current_code)
+            self.update_text_area(self.feedback_text, self.current_feedback)
+
     def execute_code(self):
         if not self.current_code.strip():
-            messagebox.showinfo("Info", "No code available to execute.")
+            messagebox.showinfo("Info", "No code available to execute.")    
             return
         threading.Thread(target=self.code_exec.execute_code, args=(self.current_code, self.log_message)).start()
         self.update_text_area(self.code_text, self.current_code)
@@ -467,7 +469,8 @@ class Application:
         self.master.destroy()
     def update_text_area(self, text_widget, content):
         text_widget.delete(1.0, END)  # Clear the current content
-        text_widget.insert(END, content)  # Insert the new content  
+        text_widget.insert(END, content)  # Insert the new content
+
 if __name__ == "__main__":
     root = Tk()
     
