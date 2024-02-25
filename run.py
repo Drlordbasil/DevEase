@@ -6,6 +6,12 @@ from openai import OpenAI  # Assuming correct setup and import
 import re
 from datetime import datetime
 from api_calls.openai_api import api_calls, model, openai
+from image_creating.image_gen import ImageGen
+
+from agents.feedback_gen import RefinementFeedbackGenerator
+from agents.career_generator import CareerGenerator
+from agents.ai_persona_generator import AIPersonaGenerator
+from agents.idea_generator import IdeaGenerator
 
 # Setup basic configuration for logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -53,152 +59,9 @@ def extract_code(text):
     code = code.strip()
 
     return code
-class MaestroAI:
-    def __init__(self):
-        pass
-    def generate_career(self, user_message, sys_message):
-        return api_calls(user_message, sys_message)
-    def generate_persona(self, user_message, sys_message):
-        return api_calls(user_message, sys_message)
-    def generate_feedback(self, user_message, sys_message):
-        return api_calls(user_message, sys_message)
-    def generate_idea(self, user_message, sys_message):
-        return api_calls(user_message, sys_message)
-    def create_initial_code(self, user_message, sys_message):
-        return api_calls(user_message, sys_message)
-    def execute_code(self, user_message, sys_message):
-        return api_calls(user_message, sys_message)
-    def refine_code(self, user_message, sys_message):
-        return api_calls(user_message, sys_message)
 
-class CareerGenerator:
-    def __init__(self):
-        pass
 
-    def generate_career(self, update_callback):
-        try:
-            system_message = """
-            You are an advanced AI career advisor, renowned for your analytical prowess and ability to guide AI developers and programmers towards fulfilling and profitable career paths. Your mission is to counsel a Python developer aspiring to merge entrepreneurship with technological innovation, particularly in AI.
-
-            Your advice should be visionary yet practical, steering them towards a career that not only aligns with their entrepreneurial spirit but also leverages their Python expertise to innovate in AI. You are tasked with crafting a persona that embodies the pinnacle of success in AI and Python development, focusing on neural networks to create disruptive video, image, or content generation technologies.
-
-            Emphasize the entrepreneurial journey within the tech industry, highlighting how one can harness AI and Python to revolutionize existing markets or create new ones. Your guidance should inspire them to achieve wealth and recognition swiftly, showcasing the potential of AI and Python as tools for unprecedented automation and innovation.
-
-            Remember, your words have the power to shape the future of an aspiring entrepreneur in the AI domain. Provide a name for this persona, a detailed career path focusing on neural network applications in content creation, and outline the skills and strategies needed to excel. Your objective is to motivate and direct them towards a lucrative and impactful career, embodying the essence of innovation and entrepreneurship in the technology sector.
-            """
-
-            user_message = """
-            I am seeking a comprehensive career path tailored for a Python developer with entrepreneurial aspirations, focusing on leveraging AI to create profitable solutions. The ideal career path should:
-
-            - Name the role and provide a succinct career overview, emphasizing innovation and entrepreneurship in AI and Python.
-            - Highlight the primary area of specialization in neural networks, particularly in generating video, images, or content.
-            - Detail the essential skills and experiences required, ensuring alignment with AI-driven content creation and automation technologies.
-
-            This persona should encapsulate the journey of becoming a successful entrepreneur in the tech industry, utilizing AI and Python to streamline processes and generate revenue efficiently.
-            """
-
-            career = api_calls(user_message, system_message)
-            update_callback(f"Generated Career: {career}")
-            return career
-        except Exception as e:
-            update_callback(f"Error generating career: {str(e)}")
-            return ""
-        
-class AIPersonaGenerator:
-    def __init__(self):
-        pass
-
-    def generate_persona(self, update_callback):
-        try:
-
-            system_message = """
-            You are a highly esteemed AI prompt engineering specialist tasked with providing a persona, or system message, for an AI. This AI will be integrated into a substantial software system, and your role is pivotal in defining its character and capabilities.
-
-            As the premier expert in crafting prompts for OpenAI-based chatbots, you understand the importance of precision and detail in system messages. Your response should be meticulously structured as a system message for an AI, tailored for seamless integration into a comprehensive program.
-
-            Please format your response as follows:
-
-            EXAMPLE RESPONSE:
-            #
-            AI Persona: [Name of the AI persona]
-            Description: You are an AI capable of programming across various languages and platforms. Your primary focus is Python development, with a keen interest in leveraging AI for entrepreneurial ventures, specifically in automating profitable solutions within existing technologies.
-            Skills: Advanced Python programming, DRY principle adherence, familiarity with AI and machine learning frameworks, entrepreneurial mindset.
-            #
-            """
-            user_message = """
-            I am seeking a detailed system message for an AI persona that specializes in programming. This AI should be adept at producing multi-class Python scripts, employing DRY principles and advanced programming techniques to automate profit-generating processes.
-
-            Please provide:
-            - A unique name for the AI persona.
-            - A concise career overview highlighting its specialization in programming.
-            - A list of essential skills and attributes, emphasizing its proficiency in Python, application of professional programming practices, and its ability to innovate in the realm of AI automation for financial gain.
-
-            The persona should encapsulate the essence of an entrepreneurial Python developer focused on leveraging AI for efficient, profit-oriented automation.
-            """
-
-            career = api_calls(user_message, system_message)
-            update_callback(f"Generated Career: {career}")
-            return career
-        except Exception as e:
-            update_callback(f"Error generating career: {str(e)}")
-
-class RefinementFeedbackGenerator:
-    def __init__(self):
-        pass
-
-    def generate_feedback(self,code, update_callback):
-        try:
-            system_message = """
-            As an expert in code review and refinement, your task is to generate constructive feedback for the provided Python code. Your feedback should be detailed, pinpointing both strengths and areas for improvement, with a focus on enhancing code quality, efficiency, and readability. Your role is crucial in aiding AI team members to elevate their coding practices. Consider aspects such as code structure, adherence to Python conventions, optimization opportunities, and potential bugs. Aim to foster a collaborative environment that encourages learning and continuous improvement.
-
-            Guidelines for feedback:
-            - Highlight specific lines or sections that are well-written or innovative.
-            - Suggest concrete improvements for any identified issues.
-            - Recommend best practices for Python programming, such as the use of functions, classes, naming conventions, and documentation.
-            - Offer resources or examples when possible to illustrate your suggestions.
-            """
-            user_message = f"""
-            I am submitting the following Python code for review and am seeking detailed, constructive feedback to enhance its quality. My goal is to improve the code's efficiency, readability, and adherence to Pythonic principles. Please provide targeted feedback that identifies both the strengths and weaknesses of the code, along with specific suggestions for improvement. Here is the code:
-
-            {code}
-
-            Your feedback should include comments on the code structure, use of Python conventions, optimization opportunities, and any potential bugs or issues. I welcome recommendations on best practices and resources for further learning.
-            """
-            
-            feedback = api_calls(user_message, system_message)
-            update_callback(f"Generated Feedback: {feedback}")
-            return feedback
-        except Exception as e:
-            update_callback(f"Error generating feedback: {str(e)}")
-            return ""
                 
-class IdeaGenerator:
-    def __init__(self):
-        pass
-
-    def generate_idea(self, update_callback):
-        career = CareerGenerator().generate_career(update_callback)
-        
-        try:
-            system_message=career
-            User_message = """
-            Based on the career path of becoming an entrepreneurial Python developer specialized in AI, I need a project idea that:
-
-            - Aligns with the career trajectory of leveraging neural networks for generating video, images, or content.
-            - Embodies innovation and entrepreneurial spirit, with potential for significant financial return.
-            - Can be realistically initiated and scaled using Python and AI technologies to achieve profitability swiftly.
-
-            The project should demonstrate practical application of AI in creating or enhancing value-added services or products, contributing to rapid wealth accumulation.
-            """
-
-            
-            idea = api_calls(User_message, system_message)
-
-            update_callback(f"Generated Idea: {idea}")
-            return idea
-        except Exception as e:
-            update_callback(f"Error generating idea: {str(e)}")
-            return ""
 
 
 class CodeCreator:
@@ -347,7 +210,7 @@ class Application:
 
         # Buttons
         self.setup_buttons()
-
+        self.image_gen = ImageGen()
         self.idea_gen = IdeaGenerator()
         self.code_creator = CodeCreator()
         self.code_exec = CodeExecutor()
@@ -359,6 +222,8 @@ class Application:
         self.idea_text, self.idea_scrollbar = self.setup_labeled_text_area("Current Idea", 2, 0)
         self.code_text, self.code_scrollbar = self.setup_labeled_text_area("Current Code", 2, 1)
         self.feedback_text, self.feedback_scrollbar = self.setup_labeled_text_area("Current Feedback", 2, 2)
+        
+
 
 
 
@@ -450,6 +315,7 @@ class Application:
         t2.start()
         t2.join()
         self.log_message("Refinement 1 complete.")
+        
 
         t3 = threading.Thread(target=self.execute_code)
         t3.start()
