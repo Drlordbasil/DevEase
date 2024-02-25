@@ -1,5 +1,7 @@
 DevEase is a GUI-based tool designed to automate and simplify the programming process, making development more accessible and efficient. By bridging the gap between idea and implementation, DevEase empowers developers of all skill levels to craft software with ease.
 ![image](https://github.com/Drlordbasil/AutoProgrammingAITeamGUIbased/assets/126736516/6a38c9be-ab60-4ac2-86c9-7df3a93987cf)
+![gggui](https://github.com/Drlordbasil/DevEase/assets/126736516/b3caa993-2134-44e7-9aec-e47a57e113ce)
+
 ```
 Generated Career: Certainly! Let's craft a persona and career path that embodies the intersection of Python development, AI innovation, and entrepreneurship, with a focus on neural networks for content creation.
 
