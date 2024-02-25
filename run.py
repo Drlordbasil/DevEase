@@ -405,7 +405,7 @@ class Application:
         if not self.current_code.strip():
             messagebox.showinfo("Info", "No code available to save.")
             return
-        file = f"final_code{time}.py"
+        file = f"Scripts/final_code{time}.py"
         with open(file, "w") as file:
             file.write(self.current_code)
         
