@@ -1,7 +1,9 @@
-# Initialize OpenAI
-
 from openai import OpenAI
+
+# Initialize OpenAI
 openai = OpenAI()
+model = "gpt-3.5-turbo-16k"
+
 
 def api_calls(user_message, sys_message):
     messages = [
