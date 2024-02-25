@@ -331,12 +331,12 @@ class Application:
         master.title("DevEase: Streamlining Development with Ease")
 
         
-        self.background_image = PhotoImage(file="background.png")  
+        self.background_image = PhotoImage(file="assets/background.png")  
         self.background_label = Label(master, image=self.background_image)
         self.background_label.place(x=0, y=0, relwidth=1, relheight=1)
  
         
-        self.logo_image = PhotoImage(file="logo.png")  
+        self.logo_image = PhotoImage(file="assets/logo.png")  
         self.logo_label = Label(master, image=self.logo_image)
         self.logo_label.pack(side="top", pady=10)
 
