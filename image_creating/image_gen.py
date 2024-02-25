@@ -5,6 +5,18 @@ from openai import OpenAI
 
 client = OpenAI()
 class ImageGen:
+    '''
+    This class is used to generate images using OpenAI's DALL-E model.
+    prompt: str
+        The prompt to generate the image from the model must be creative and dinstinctive.
+        This means the ai from api_calls/openai_api.py can be used to generate a prompt.
+        We can use the response from the ai to generate the prompt.
+        they can create logos, backgrounds, and other images required for them to do their jobs better. This is a great way to generate images for the website for instance.
+        
+
+    
+    
+    '''
     def __init__(self):
         pass
     def generate_image(self, prompt):
@@ -20,6 +32,7 @@ class ImageGen:
         response = requests.get(url)
         img = Image.open(BytesIO(response.content))
         img.save(filename)
+
     
 #image_gen = ImageGen()
 #url = image_gen.generate_image("a painting of a cat")
