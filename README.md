@@ -159,4 +159,10 @@ def generate_content():
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
+Code execution timed out.
+Idea gen complete.
+Refinement 1 complete.
+Execution complete.
+Save complete.
+Auto generation complete.
 ```
