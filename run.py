@@ -193,6 +193,7 @@ class IdeaGenerator:
 
             
             idea = api_calls(User_message, system_message)
+
             update_callback(f"Generated Idea: {idea}")
             return idea
         except Exception as e:
@@ -391,7 +392,7 @@ class Application:
     def generate_idea(self):
         threading.Thread(target=self._generate_idea_and_code).start()
         self.update_text_area(self.idea_text, self.current_idea)
-        
+        self.current_idea = self.idea_gen.generate_idea(self.log_message)
 
     def _generate_idea_and_code(self):
         idea = self.idea_gen.generate_idea(self.log_message)
@@ -441,7 +442,7 @@ class Application:
         t1.join()
         self.log_message("Idea gen complete.")
         self.update_text_area(self.idea_text, self.current_idea)
-        
+
 
         t2 = threading.Thread(target=self.refine_code)
         t2.start()
