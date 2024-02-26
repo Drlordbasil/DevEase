@@ -355,7 +355,7 @@ class Application:
 
 if __name__ == "__main__":
     root = Tk()
-    
+    root.anchor = "center"
     app = Application(root)
     
     root.mainloop()
