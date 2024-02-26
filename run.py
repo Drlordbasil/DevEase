@@ -343,19 +343,13 @@ class Application:
         self.update_text_area(self.idea_text, self.current_idea)
 
         for _ in range(5):
-            t2 = threading.Thread(target=self.refine_code)
-            t2.start()
-            t2.join()
+            self.refine_code()
             self.log_message("Refinement complete.")
 
-        t3 = threading.Thread(target=self.execute_code)
-        t3.start()
-        t3.join()
+        self.execute_code()
         self.log_message("Execution complete.")
 
-        t4 = threading.Thread(target=self.save_final_code)
-        t4.start()
-        t4.join()
+        self.save_final_code()
         self.log_message("Save complete.")
 
         self.log_message("Auto generation complete.")
