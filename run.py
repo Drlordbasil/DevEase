@@ -110,6 +110,9 @@ format your response with markdowns as such:(only answer in this format)
             initial_code = extract_code(initial_code)
 
             update_callback(f"Initial Code: {initial_code}")
+            update_callback(f"Persona: {persona}")
+            update_callback(f"Idea: {idea}")
+            update_callback(f"current code: {initial_code}")
             return initial_code
         except Exception as e:
             update_callback(f"Error creating initial code: {str(e)}")
@@ -177,8 +180,11 @@ format your response with markdowns as such:(only answer in this format)
 
 """
             refined_code = api_calls(user_message, system_message)
-            refined_code = extract_code(refined_code)
-            
+            if refined_code:
+                refined_code = extract_code(refined_code)
+            else:
+                update_callback("No refined code found.")
+
 
 
             update_callback(f"Refined Code: {refined_code}")
