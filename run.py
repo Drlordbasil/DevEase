@@ -120,7 +120,7 @@ class CodeExecutor:
     def execute_code(self, code, update_callback):
         imports = extract_imports_from_code(code)
         try:
-            with open("temp_code.py", "w") as file:
+            with open("Scripts/temp_code.py", "w") as file:
                 file.write(code)
             #subprocess.run(["pip", "install", imports], capture_output=True, text=True)
             result = subprocess.run(["python", "Scripts/temp_code.py"], capture_output=True, text=True, timeout=15)
