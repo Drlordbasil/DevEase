@@ -255,17 +255,20 @@ class Application:
         return text_widget, scrollbar
 
     def setup_buttons(self):
-        self.generate_idea_button = Button(self.master, text="Generate Project Idea", command=self.generate_idea)
-        self.execute_code_button = Button(self.master, text="Execute Code", command=self.execute_code)
-        self.refine_code_button = Button(self.master, text="Refine Code", command=self.refine_code)
-        self.save_final_code_button = Button(self.master, text="Save Final Code", command=self.save_final_code)
-        self.auto_generate_button = Button(self.master, text="Auto Generate Program", command=self.on_auto_generate_button_click)
+        button_frame = Frame(self.master, background="black")
+        button_frame.grid(row=3, column=0, columnspan=4, padx=5, pady=5, sticky="ew")
 
-        self.generate_idea_button.grid(row=3, column=0, padx=5, pady=5, sticky="ew")
-        self.execute_code_button.grid(row=3, column=1, padx=5, pady=5, sticky="ew")
-        self.refine_code_button.grid(row=3, column=2, padx=5, pady=5, sticky="ew")
-        self.save_final_code_button.grid(row=3, column=3, padx=5, pady=5, sticky="ew")
-        self.auto_generate_button.grid(row=4, column=0, columnspan=4, padx=5, pady=5, sticky="ew")
+        self.generate_idea_button = Button(button_frame, text="Generate Project Idea", command=self.generate_idea, bg="#111111", fg="#00FF00")
+        self.execute_code_button = Button(button_frame, text="Execute Code", command=self.execute_code, bg="#111111", fg="#00FF00")
+        self.refine_code_button = Button(button_frame, text="Refine Code", command=self.refine_code, bg="#111111", fg="#00FF00")
+        self.save_final_code_button = Button(button_frame, text="Save Final Code", command=self.save_final_code, bg="#111111", fg="#00FF00")
+        self.auto_generate_button = Button(button_frame, text="Auto Generate Program", command=self.on_auto_generate_button_click, bg="#111111", fg="#00FF00")
+
+        self.generate_idea_button.pack(side="left", padx=5, pady=5)
+        self.execute_code_button.pack(side="left", padx=5, pady=5)
+        self.refine_code_button.pack(side="left", padx=5, pady=5)
+        self.save_final_code_button.pack(side="left", padx=5, pady=5)
+        self.auto_generate_button.pack(padx=5, pady=5)
 
     def log_message(self, message):
         self.log.insert(END, message + "\n")
