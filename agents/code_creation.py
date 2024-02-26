@@ -36,7 +36,7 @@ format your response with markdowns as such:(only answer in this format)
 # Description: [Brief description of the project]
 # complete code here
 ```
-
+You are an amazing programmer. I trust you to create a code that is both efficient and effective.
 """
             
             initial_code = api_calls(user_message, system_message)
