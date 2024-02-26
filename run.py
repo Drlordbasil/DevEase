@@ -1,6 +1,6 @@
 import subprocess
 import threading
-from tkinter import Tk, PhotoImage, Label, Text, Scrollbar, Button, END, messagebox, VERTICAL, Frame
+from tkinter import Tk, PhotoImage, Label, Text, Scrollbar, Button, END, messagebox, VERTICAL, Frame, Canvas, NW
 import logging
 from openai import OpenAI  # Assuming correct setup and import
 import re
@@ -196,17 +196,24 @@ class Application:
         self.master = master
         master.title("DevEase: Streamlining Development with Ease")
         
-        self.background_image = PhotoImage(file="assets/background.png")  
+        # Background image
+        self.background_image = PhotoImage(file="assets/background.png")
         self.background_label = Label(master, image=self.background_image)
         self.background_label.place(x=0, y=0, relwidth=1, relheight=1)
-        
-        self.logo_image = PhotoImage(file="assets/logo.png")  
-        self.logo_label = Label(master, image=self.logo_image)
-        self.logo_label.grid(row=0, column=0, columnspan=4, sticky="ew", pady=10)
 
-        self.log = Text(master, height=25, width=100, wrap="word")
-        self.scrollbar = Scrollbar(master, command=self.log.yview, orient=VERTICAL)
-        self.log.configure(yscrollcommand=self.scrollbar.set, bg="white", fg="black")
+        # Logo image
+        #self.logo_image = PhotoImage(file="assets/logo.png")
+
+        # Create a Canvas for the logo image
+        #self.logo_canvas = Canvas(master, width=self.logo_image.width(), height=self.logo_image.height(), bd=0, highlightthickness=0)
+        #self.logo_canvas.create_image(0, 0, anchor=NW, image=self.logo_image)
+        #self.logo_canvas.grid(row=0, column=0, columnspan=1, sticky="ew", pady=0)
+
+
+
+        self.log = Text(master, height=25, width=100, wrap="word", bg="#111111", fg="#00FF00", insertbackground="#00FF00")
+        self.scrollbar = Scrollbar(master, command=self.log.yview, orient=VERTICAL, troughcolor="#111111")
+        self.log.configure(yscrollcommand=self.scrollbar.set)
         self.log.grid(row=1, column=0, columnspan=3, sticky="nsew")
         self.scrollbar.grid(row=1, column=3, sticky="ns")
 
@@ -235,16 +242,18 @@ class Application:
 
 
     def setup_labeled_text_area(self, label_text, row, column):
-        frame = Frame(self.master)
-        label = Label(frame, text=label_text)
+        frame = Frame(self.master, background="black", borderwidth=1, relief="solid")
+        label = Label(frame, text=label_text, fg="#00FF00", bg="black")
         label.pack(side="top", fill="x")
-        text_widget = Text(frame, height=10, width=50, wrap="word")
-        scrollbar = Scrollbar(frame, command=text_widget.yview, orient=VERTICAL)
+        text_widget = Text(frame, height=10, width=50, wrap="word", bg="#111111", fg="#00FF00", insertbackground="#00FF00",
+                        borderwidth=0, highlightthickness=0, font=("Consolas", 10))
+        scrollbar = Scrollbar(frame, command=text_widget.yview, orient=VERTICAL, troughcolor="#111111")
         text_widget.configure(yscrollcommand=scrollbar.set)
         text_widget.pack(side="left", fill="both", expand=True)
         scrollbar.pack(side="right", fill="y")
         frame.grid(row=row, column=column, padx=5, pady=5, sticky="nsew")
         return text_widget, scrollbar
+
     def setup_buttons(self):
         self.generate_idea_button = Button(self.master, text="Generate Project Idea", command=self.generate_idea)
         self.execute_code_button = Button(self.master, text="Execute Code", command=self.execute_code)
