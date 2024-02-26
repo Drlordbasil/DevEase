@@ -51,7 +51,7 @@ This code must be:
 """
             refined_code = api_calls(user_message, system_message)
             refined_code = extract_code(refined_code)
-
+            
 
             update_callback(f"Refined Code: {refined_code}")
             return refined_code

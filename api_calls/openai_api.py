@@ -1,16 +1,27 @@
 from openai import OpenAI
+from memory.basicshortmemory import BasicShortMemory
+
 
 # Initialize OpenAI
 openai = OpenAI()
 
 gpt3 = "gpt-3.5-turbo-16k"
 gpt4 = "gpt-4-0125-preview"
-model = gpt4
+model = gpt3
 
-history = ""
 
 def api_calls(user_message, sys_message):
-    global history
+    """
+    Makes API calls to OpenAI chat completions.
+
+    Args:
+        user_message (str): The user's message.
+        sys_message (str): The system's message.
+
+    Returns:
+        str: The response from the API call.
+    """
+    
 
     # Validate input
     if not isinstance(user_message, str) or not isinstance(sys_message, str):
@@ -18,8 +29,8 @@ def api_calls(user_message, sys_message):
 
     messages = [
         {"role": "system", "content": sys_message},
-        {"role": "user", "content": user_message},
-        {"role": "assistant", "content": history}
+        {"role": "user", "content": user_message}
+       # {"role": "assistant", "content": history}
     ]
 
     try:
@@ -31,8 +42,8 @@ def api_calls(user_message, sys_message):
     except Exception as e:
         raise RuntimeError("Failed to make API call: " + str(e))
 
-    try:
-        history += response.choices[0].message.content
+    #try:
+        #history += response.choices[0].message.content
     except (IndexError, AttributeError) as e:
         raise RuntimeError("Failed to update history: " + str(e))
 
