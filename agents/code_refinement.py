@@ -36,7 +36,18 @@ format your response with markdowns as such:(only answer in this format)
 # Description: [Brief description of the project]
 # complete code here
 ```
-
+Dont include placeholders, comments or print statements in the final code
+This code must be:
+- A complete working program
+- Free of any syntax errors
+- Free of any placeholders
+- Free of any inline comments
+- profitable and innovative, showcasing the potential of AI and Python as tools for unprecedented automation and innovation.
+- Everything it codes must be in full complete code as a single file, and it must be able to run without any errors.
+- The code should be a robust and pride-worthy contribution to our project.
+- The code should be a testament to your skill, with every line reflecting a commitment to quality.
+- It should serve as a robust, fully-realized implementation, free of placeholders and inline comments, embodying the best of Python development practices.
+- The code should be a testament to your skill, with every line reflecting a commitment to quality.
 """
             refined_code = api_calls(user_message, system_message)
             refined_code = extract_code(refined_code)
