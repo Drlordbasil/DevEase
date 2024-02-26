@@ -191,15 +191,12 @@ if __name__ == "__main__":
 ```
 ## Contributing
 
-We welcome contributions from the community! If you're interested in improving DevEase, please follow my [contribution guidelines](LINK_TO_CONTRIBUTING_GUIDELINES).
+We welcome contributions from the community! 
 
 ## Support
 
 If you encounter any issues or have questions, please file an issue on GitHub or contact me at drlordbasil@gmail.com.
 
-## License
-
-DevEase is licensed under the MIT License. See the [LICENSE](LINK_TO_LICENSE) file for more details.
 
 ## Acknowledgments
 
