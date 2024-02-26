@@ -16,14 +16,11 @@ from agents.idea_generator import IdeaGenerator
 from agents.adaptive_scripter import AdaptiveScripter
 
 
-# Setup basic configuration for logging
+
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
 
-
- #To be worked on
-# def save_modularized():
 
 
 def extract_imports_from_code(code):
@@ -210,13 +207,7 @@ class Application:
         self.background_label = Label(master, image=self.background_image)
         self.background_label.place(x=0, y=0, relwidth=1, relheight=1)
 
-        # Logo image
-        #self.logo_image = PhotoImage(file="assets/logo.png")
 
-        # Create a Canvas for the logo image
-        #self.logo_canvas = Canvas(master, width=self.logo_image.width(), height=self.logo_image.height(), bd=0, highlightthickness=0)
-        #self.logo_canvas.create_image(0, 0, anchor=NW, image=self.logo_image)
-        #self.logo_canvas.grid(row=0, column=0, columnspan=1, sticky="ew", pady=0)
 
 
 
