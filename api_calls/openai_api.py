@@ -2,8 +2,10 @@ from openai import OpenAI
 
 # Initialize OpenAI
 openai = OpenAI()
-model = "gpt-4-0125-preview"
 
+gpt3 = "gpt-3.5-turbo-16k"
+gpt4 = "gpt-4-0125-preview"
+model = gpt4
 
 history = ""
 
@@ -18,7 +20,9 @@ def api_calls(user_message, sys_message):
         messages=messages,
         temperature=0.3
     )
+    #history += messages
     history += response.choices[0].message.content
+    
     #print("history: ", history)
 
     return response.choices[0].message.content
