@@ -235,6 +235,11 @@ class Application:
         self.current_idea = ""
         self.current_code = ""  
         self.current_feedback = ""
+        self.current_persona = ""
+        self.current_ceo_message = ""
+        self.current_image = ""
+
+        
         self.idea_text, self.idea_scrollbar = self.setup_labeled_text_area("Current Idea", 2, 0)
         self.code_text, self.code_scrollbar = self.setup_labeled_text_area("Current Code", 2, 1)
         self.feedback_text, self.feedback_scrollbar = self.setup_labeled_text_area("Current Feedback", 2, 2)
