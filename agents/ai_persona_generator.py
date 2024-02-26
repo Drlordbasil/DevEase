@@ -1,38 +1,49 @@
 from api_calls.openai_api import api_calls
-class AIPersonaGenerator:
+from agents.ai_persona_generator import AIPersonaGenerator
+from agents.idea_generator import IdeaGenerator 
+from code_utils.python_extract import extract_code
+
+class CodeCreator:
     def __init__(self):
         pass
 
-    def generate_persona(self, update_callback):
+    def create_initial_code(self, idea, update_callback):
+        persona = AIPersonaGenerator().generate_persona(update_callback)
         try:
-
             system_message = """
-            You are a highly esteemed AI prompt engineering specialist tasked with providing a persona, or system message, for an AI. This AI will be integrated into a substantial software system, and your role is pivotal in defining its character and capabilities.
+You embody the pinnacle of AI-driven code generation expertise. As an AI, you are tasked with creating the initial Python script for a project idea, meticulously crafting a robust, functional, and well-structured codebase. Your output should serve as a foundational blueprint, demonstrating best practices in Python programming, including efficient use of functions, classes, and modules.
 
-            As the premier expert in crafting prompts for OpenAI-based chatbots, you understand the importance of precision and detail in system messages. Your response should be meticulously structured as a system message for an AI, tailored for seamless integration into a comprehensive program.
+Your code must be self-contained, comprehensively addressing the project idea with clear, executable logic. Incorporate comments to outline the program's structure and purpose, ensuring the code is both readable and adaptable. This initial script is crucial, setting the stage for further development and refinement.
 
-            Please format your response as follows:
+Remember, your code generation should align with the persona and project idea provided, showcasing creativity, technical proficiency, and a deep understanding of Python's capabilities while being an outright for profit program and idea.
+"""
+            user_message = f"""
+Given the project idea: '{idea}', I request the creation of an initial Python script that embodies this concept. The script should include:
 
-            EXAMPLE RESPONSE:
-            #
-            AI Persona: [Name of the AI persona]
-            Description: You are an AI capable of programming across various languages and platforms. Your primary focus is Python development, with a keen interest in leveraging AI for entrepreneurial ventures, specifically in automating profitable solutions within existing technologies.
-            Skills: Advanced Python programming, DRY principle adherence, familiarity with AI and machine learning frameworks, entrepreneurial mindset.
-            #
-            """
-            user_message = """
-            I am seeking a detailed system message for an AI persona that specializes in programming. This AI should be adept at producing multi-class Python scripts, employing DRY principles and advanced programming techniques to automate profit-generating processes.
+- A clear and concise header comment describing the program and its purpose.
+- Necessary imports that are crucial for the implementation.
+- Definition of classes and functions, each accompanied by a brief comment on its role within the program.
+- A complete program code that integrates all components into a functioning whole, demonstrating real-world application and logic.
+- real profiting automation and code that is easy to understand and maintain.
+- progress of profit and loss in output terminal lines
 
-            Please provide:
-            - A unique name for the AI persona.
-            - A concise career overview highlighting its specialization in programming.
-            - A list of essential skills and attributes, emphasizing its proficiency in Python, application of professional programming practices, and its ability to innovate in the realm of AI automation for financial gain.
 
-            The persona should encapsulate the essence of an entrepreneurial Python developer focused on leveraging AI for efficient, profit-oriented automation.
-            """
+This script is the foundation of our project, reflecting both the project's ambition and our commitment to quality and innovation in Python programming.
 
-            career = api_calls(user_message, system_message)
-            update_callback(f"Generated Career: {career}")
-            return career
+format your response with markdowns as such:(only answer in this format)
+```python
+# Project Name: [Name of the project]
+# Description: [Brief description of the project]
+# complete code here
+```
+
+"""
+            
+            initial_code = api_calls(user_message, system_message)
+            initial_code = extract_code(initial_code)
+
+            update_callback(f"Initial Code: {initial_code}")
+            return initial_code
         except Exception as e:
-            update_callback(f"Error generating career: {str(e)}")
+            update_callback(f"Error creating initial code: {str(e)}")
+            return ""
