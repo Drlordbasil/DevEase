@@ -5,14 +5,14 @@ import logging
 from openai import OpenAI  # Assuming correct setup and import
 import re
 from datetime import datetime
-from api_calls.openai_api import api_calls, model, openai
+from api_calls.openai_api import api_calls
 from image_creating.image_gen import ImageGen
 
 from agents.feedback_gen import RefinementFeedbackGenerator
-from agents.career_generator import CareerGenerator
+
 from agents.ai_persona_generator import AIPersonaGenerator
 from agents.idea_generator import IdeaGenerator
-from openai import OpenAI
+
 from agents.adaptive_scripter import AdaptiveScripter
 
 
