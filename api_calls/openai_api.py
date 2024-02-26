@@ -26,7 +26,7 @@ def api_calls(user_message, sys_message):
         response = openai.chat.completions.create(
             model=model,
             messages=messages,
-            temperature=0.3
+            temperature=0.7
         )
     except Exception as e:
         raise RuntimeError("Failed to make API call: " + str(e))
