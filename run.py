@@ -342,12 +342,11 @@ class Application:
         self.log_message("Idea gen complete.")
         self.update_text_area(self.idea_text, self.current_idea)
 
-
-        t2 = threading.Thread(target=self.refine_code)
-        t2.start()
-        t2.join()
-        self.log_message("Refinement 1 complete.")
-        
+        for _ in range(5):
+            t2 = threading.Thread(target=self.refine_code)
+            t2.start()
+            t2.join()
+            self.log_message("Refinement complete.")
 
         t3 = threading.Thread(target=self.execute_code)
         t3.start()
