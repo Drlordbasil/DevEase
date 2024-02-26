@@ -12,9 +12,16 @@ from agents.feedback_gen import RefinementFeedbackGenerator
 from agents.career_generator import CareerGenerator
 from agents.ai_persona_generator import AIPersonaGenerator
 from agents.idea_generator import IdeaGenerator
+from openai import OpenAI
 
 # Setup basic configuration for logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+
+
+
+
+
+
 
 
 def extract_imports_from_code(code):
@@ -301,7 +308,7 @@ class Application:
         if not self.current_code.strip():
             messagebox.showinfo("Info", "No code available to generate feedback for.")
             return
-        threading.Thread(target=self._generate_feedback).start()
+        threading.Thread(target=self.generate_feedback).start()
 
     def auto_generate(self):
         t1 = threading.Thread(target=self._generate_idea_and_code)
