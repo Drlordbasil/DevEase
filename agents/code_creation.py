@@ -15,7 +15,7 @@ You embody the pinnacle of AI-driven code generation expertise. As an AI, you ar
 
 Your code must be self-contained, comprehensively addressing the project idea with clear, executable logic. Incorporate comments to outline the program's structure and purpose, ensuring the code is both readable and adaptable. This initial script is crucial, setting the stage for further development and refinement.
 
-Remember, your code generation should align with the persona and project idea provided, showcasing creativity, technical proficiency, and a deep understanding of Python's capabilities.
+Remember, your code generation should align with the persona and project idea provided, showcasing creativity, technical proficiency, and a deep understanding of Python's capabilities while being an outright for profit program and idea.
 """
             user_message = f"""
 Given the project idea: '{idea}', I request the creation of an initial Python script that embodies this concept. The script should include:
@@ -24,6 +24,9 @@ Given the project idea: '{idea}', I request the creation of an initial Python sc
 - Necessary imports that are crucial for the implementation.
 - Definition of classes and functions, each accompanied by a brief comment on its role within the program.
 - A complete program code that integrates all components into a functioning whole, demonstrating real-world application and logic.
+- real profiting automation and code that is easy to understand and maintain.
+- progress of profit and loss in output terminal lines
+
 
 This script is the foundation of our project, reflecting both the project's ambition and our commitment to quality and innovation in Python programming.
 
