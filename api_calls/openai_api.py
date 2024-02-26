@@ -1,11 +1,10 @@
 from openai import OpenAI
-
 # Initialize OpenAI
 openai = OpenAI()
 
 gpt3 = "gpt-3.5-turbo-16k"
 gpt4 = "gpt-4-0125-preview"
-model = gpt4
+model = gpt3
 
 history = ""
 

@@ -13,6 +13,8 @@ from agents.career_generator import CareerGenerator
 from agents.ai_persona_generator import AIPersonaGenerator
 from agents.idea_generator import IdeaGenerator
 from openai import OpenAI
+from agents.adaptive_scripter import AdaptiveScripter
+
 
 # Setup basic configuration for logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -229,6 +231,8 @@ class Application:
         self.code_creator = CodeCreator()
         self.code_exec = CodeExecutor()
         self.code_refiner = CodeRefiner()
+        self.adaptive_scripter = AdaptiveScripter()
+
 
         self.current_idea = ""
         self.current_code = ""  
@@ -263,12 +267,18 @@ class Application:
         self.refine_code_button = Button(button_frame, text="Refine Code", command=self.refine_code, bg="#111111", fg="#00FF00")
         self.save_final_code_button = Button(button_frame, text="Save Final Code", command=self.save_final_code, bg="#111111", fg="#00FF00")
         self.auto_generate_button = Button(button_frame, text="Auto Generate Program", command=self.on_auto_generate_button_click, bg="#111111", fg="#00FF00")
+        self.adaptive_test_button = Button(button_frame, text="Adaptive Test", command=self.on_adaptive_test_button_click, bg="#111111", fg="#00FF00")
+
 
         self.generate_idea_button.pack(side="left", padx=5, pady=5)
         self.execute_code_button.pack(side="left", padx=5, pady=5)
         self.refine_code_button.pack(side="left", padx=5, pady=5)
         self.save_final_code_button.pack(side="left", padx=5, pady=5)
         self.auto_generate_button.pack(padx=5, pady=5)
+        self.adaptive_test_button.pack(padx=5, pady=5)
+
+    def on_adaptive_test_button_click(self):
+        threading.Thread(target=AdaptiveScripter().test).start()
 
     def log_message(self, message):
         self.log.insert(END, message + "\n")
