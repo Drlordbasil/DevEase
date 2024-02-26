@@ -178,6 +178,7 @@ format your response with markdowns as such:(only answer in this format)
 """
             refined_code = api_calls(user_message, system_message)
             refined_code = extract_code(refined_code)
+            
 
 
             update_callback(f"Refined Code: {refined_code}")

@@ -12,7 +12,8 @@ def api_calls(user_message, sys_message):
     global history
     messages = [
         {"role": "system", "content": sys_message},
-        {"role": "user", "content": history+user_message}
+        {"role": "user", "content": user_message},
+        {"role": "assistant", "content": history}
     ]
     response = openai.chat.completions.create(
         model=model,
