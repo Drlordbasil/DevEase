@@ -1,11 +1,12 @@
 from api_calls.openai_api import api_calls
 
-
+current_CEO_message = ""
 
 class CEO:
     def __init__(self):
         pass
         # review the employee using CEO persona
+    
     def review_employee(self, employee_name, employee_message):
         try:
             system_message = """
@@ -26,8 +27,10 @@ class CEO:
 
         """
             CEO_feedback = api_calls(user_message, system_message)
+
             return CEO_feedback
-        except:
-             # Handle the exception here
-            pass
+        except Exception as e:
+            return f"An error occurred: {e}"
+# review the employee using CEO persona 
+        
 

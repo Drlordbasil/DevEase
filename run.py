@@ -140,7 +140,7 @@ class Application:
         if not self.current_code.strip():
             messagebox.showinfo("Info", "No code available to refine.")
             return
-        threading.Thread(target=self.code_refiner.refine_code, args=(self.current_code, self.current_feedback, self.log_message)).start()
+        threading.Thread(target=self.code_refiner.refine_code, args=(self.current_code, self.current_feedback+self.current_ceo_message, self.log_message)).start()
         threading.Thread(target=self.code_exec.execute_code, args=(self.current_code, self.log_message)).start()
         self.update_text_area(self.code_text, self.current_code)
         
@@ -163,6 +163,9 @@ class Application:
             messagebox.showinfo("Info", "No code available to generate feedback for.")
             return
         threading.Thread(target=self.generate_feedback).start()
+        self.update_text_area(self.feedback_text, self.current_feedback)
+        self.current_ceo_message = self.CEO.review_employee("CodeRefiner", self.current_feedback)
+
 
     def auto_generate(self):
         t1 = threading.Thread(target=self._generate_idea_and_code)
