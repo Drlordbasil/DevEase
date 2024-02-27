@@ -1,5 +1,6 @@
 
 from agents.ai_persona_generator import AIPersonaGenerator
+from agents.CEO_persona import CEO
 from api_calls.openai_api import api_calls
 import re
 import subprocess
@@ -65,7 +66,8 @@ ValueError: File format not supported: filepath=path_to_model. Keras 3 only supp
             
             initial_code = api_calls(user_message, system_message)
             initial_code = extract_code(initial_code)
-
+            ceo = CEO()
+            ceo_feedback = ceo.review_employee("CodeCreator", initial_code)
             update_callback(f"Initial Code: {initial_code}")
             update_callback(f"Persona: {persona}")
             update_callback(f"Idea: {idea}")

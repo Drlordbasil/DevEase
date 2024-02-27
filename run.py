@@ -14,6 +14,8 @@ from agents.adaptive_scripter import AdaptiveScripter
 from agents.file_manager import get_file_name, add_current_code_to_file
 from agents.code_refinement import CodeRefiner
 from code_exe import CodeExecutor
+from agents.CEO_persona import CEO
+
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
@@ -51,7 +53,7 @@ class Application:
         self.code_exec = CodeExecutor()
         self.code_refiner = CodeRefiner()
         self.adaptive_scripter = AdaptiveScripter()
-
+        self.CEO = CEO()
 
         self.current_idea = ""
         self.current_code = ""  
@@ -59,6 +61,8 @@ class Application:
         self.current_persona = ""
         self.current_ceo_message = ""
         self.current_image = ""
+        self.current_ceo_message = ""
+
 
         
         self.idea_text, self.idea_scrollbar = self.setup_labeled_text_area("Current Idea", 2, 0)
@@ -113,8 +117,11 @@ class Application:
 
     def _generate_idea_and_code(self):
         idea = self.idea_gen.generate_idea(self.log_message)
+        ceo_feedback = self.CEO.review_employee("IdeaGenerator", idea)
+        print(ceo_feedback)
         if idea:
             self.current_idea = idea  # Make sure to update self.current_idea
+            self.current_ceo_message = ceo_feedback # CEO feedback added in loop
             self.update_text_area(self.idea_text, self.current_idea)  # Now update the text area
             self.current_code = self.code_creator.create_initial_code(idea, self.log_message)
             self.current_feedback = self.code_exec.execute_code(self.current_code, self.log_message)
