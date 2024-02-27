@@ -18,6 +18,8 @@ class IdeaGenerator:
             - Can be realistically initiated and scaled using Python and AI technologies to achieve profitability swiftly.
 
             The project should demonstrate practical application of AI in creating or enhancing value-added services or products, contributing to rapid wealth accumulation.
+            make the idea a WOW factor Idea that could shock the world and make it a better place.
+            
             """
 
             

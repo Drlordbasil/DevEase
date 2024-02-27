@@ -1,7 +1,32 @@
-from agents.coding_task.code_extract import extract_code
+
 from api_calls.openai_api import api_calls
 
+import re
 
+def extract_code(text):
+    """
+    Extracts Python code from a given text.
+
+    Args:
+        text: The text to extract the code from.
+
+    Returns:
+        A string containing the extracted Python code.
+    """
+
+    # Define the regular expression pattern for matching Python code blocks
+    pattern = r"```python\n((?:.|\n)*?)```"
+
+    # Find all the Python code blocks in the text
+    code_blocks = re.findall(pattern, text)
+
+    # Join the code blocks into a single string
+    code = "\n".join(code_blocks)
+
+    # Remove the leading and trailing newlines
+    code = code.strip()
+
+    return code
 
 class CodeRefiner:
     def __init__(self):
@@ -14,7 +39,7 @@ class CodeRefiner:
 
             The task at hand involves meticulously reviewing the provided script, incorporating feedback, and making precise adjustments to transform it into a model of programming excellence. Your modifications should refine the code without altering its core functionality or reducing its complexity. Instead, focus on enhancing its structure, performance, and maintainability.
 
-            Your refined code should be a testament to your skill, with every line reflecting a commitment to quality. It should serve as a robust, fully-realized implementation, free of placeholders and inline comments, embodying the best of Python development practices.
+            Your refined code should be a testament to your skill, with every line reflecting a commitment to quality. It should serve as a robust, fully-realized implementation, free of placeholders and inline comments, embodying the best of Python development practices. direct any code you recieve to profiting stage.
             """
             user_message = f"""
 I have provided below the initial Python script alongside specific feedback for improvement. Please refine this code according to the following directives:
