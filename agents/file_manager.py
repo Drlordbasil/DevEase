@@ -15,7 +15,7 @@ def extract_filename(response_text):
 def save_response_to_file(content, file_name):
     """Save the given content to a file with the specified name, excluding the filename line."""
     content_to_save = re.sub(r"\nFilename: .+$", "", content, flags=re.MULTILINE)  # Remove the filename line from the content
-    with open(file_name, 'w') as file:
+    with open(f"Scripts/{file_name}", 'w') as file:
         file.write(content_to_save)
 
 def get_file_name(user_message, sys_message):
@@ -29,9 +29,14 @@ def get_file_name(user_message, sys_message):
     
     if filename:
         # Save the response content to a file with the extracted filename
-        save_response_to_file(response_text, filename)
+        save_response_to_file(response_text, f"Scripts/filename")
         print(f"Response saved to {filename}")
     else:
         print("Filename extraction failed.")
+    return filename
+def add_current_code_to_file(file_name, code):
+    """Add the given code to the end of the file with the specified name."""
+    with open(file_name, 'a') as file:
+        file.write(f"\n{code}")
 
 
