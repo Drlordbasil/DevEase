@@ -59,6 +59,8 @@ format your response with markdowns as such:(only answer in this format)
 ```
 you have these libraries you can use:
 {libraries}
+profit > everything else
+you must make money with this code
 
 
 """

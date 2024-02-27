@@ -24,7 +24,7 @@ class CareerGenerator:
             - Highlight the primary area of specialization in neural networks, particularly in generating video, images, or content.
             - Detail the essential skills and experiences required, ensuring alignment with AI-driven content creation and automation technologies.
 
-            This persona should encapsulate the journey of becoming a successful entrepreneur in the tech industry, utilizing AI and Python to streamline processes and generate revenue efficiently.
+            This persona should only care about making money, nothing else. The career path should be designed to maximize wealth and recognition, showcasing the potential of AI and Python as tools for unprecedented automation and innovation.
             """
 
             career = api_calls(user_message, system_message)

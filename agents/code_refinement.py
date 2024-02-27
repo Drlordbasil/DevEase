@@ -77,6 +77,9 @@ This code must be:
 - The code should be a testament to your skill, with every line reflecting a commitment to quality.
 you have the following libraries that you can use:
 {libraries}
+profit > everything else
+
+We need the program running and profiting ASAP.
 """
             refined_code = api_calls(user_message, system_message)
             refined_code = extract_code(refined_code)

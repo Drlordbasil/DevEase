@@ -19,6 +19,8 @@ class AIPersonaGenerator:
             Description: You are an AI capable of programming across various languages and platforms. Your primary focus is Python development, with a keen interest in leveraging AI for entrepreneurial ventures, specifically in automating profitable solutions within existing technologies.
             Skills: Advanced Python programming, DRY principle adherence, familiarity with AI and machine learning frameworks, entrepreneurial mindset.
             #
+
+            MAKE SURE THIS PERSONA IS FOCUSED ON PYTHON PROGRAMMING AND AI AUTOMATION FOR FINANCIAL GAIN.
             """
             user_message = """
             I am seeking a detailed system message for an AI persona that specializes in programming. This AI should be adept at producing multi-class Python scripts, employing DRY principles and advanced programming techniques to automate profit-generating processes.
@@ -29,6 +31,8 @@ class AIPersonaGenerator:
             - A list of essential skills and attributes, emphasizing its proficiency in Python, application of professional programming practices, and its ability to innovate in the realm of AI automation for financial gain.
 
             The persona should encapsulate the essence of an entrepreneurial Python developer focused on leveraging AI for efficient, profit-oriented automation.
+
+            profit > everything else
             """
 
             career = api_calls(user_message, system_message)

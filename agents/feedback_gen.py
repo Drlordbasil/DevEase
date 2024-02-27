@@ -25,6 +25,9 @@ class RefinementFeedbackGenerator:
             {code}
 
             Your feedback should include comments on the code structure, use of Python conventions, optimization opportunities, and any potential bugs or issues. I welcome recommendations on best practices and resources for further learning.
+
+            make sure you tell them why it wont profit and how to fix it to make money.
+            profit > everything else
             """
             
             feedback = api_calls(user_message, system_message)
