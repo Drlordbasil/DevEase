@@ -70,6 +70,9 @@ class CodeExecutor:
             feedback = None
         finally:
             return feedback
+    def find_pip_installed_packages(self):
+        result = subprocess.run(["pip", "list"], capture_output=True, text=True)
+        return result.stdout
         
 
 
@@ -79,6 +82,7 @@ class CodeRefiner:
 
     def refine_code(self, code, feedback, update_callback):
         try:
+            current_libraries = CodeExecutor().find_pip_installed_packages()
             system_message = """
             As a distinguished specialist in code refinement, your expertise is sought to optimize and enhance a given Python script. Your role is critical in elevating the code's efficiency, readability, and overall effectiveness, ensuring it adheres to the highest standards of Python programming.
 
@@ -106,7 +110,7 @@ format your response with markdowns as such:(only answer in this format)
 # Description: [Brief description of the project]
 # complete code here
 ```
-
+Available Libraries: {current_libraries}
 """
             refined_code = api_calls(user_message, system_message)
             if refined_code:
@@ -132,7 +136,7 @@ format your response with markdowns as such:(only answer in this format)
 class Application:
     def __init__(self, master):
         self.master = master
-        master.title("DevEase: Streamlining Development with Ease")
+        master.title("DevEase: Streamlining Development with Ease Utilizing a personal AI army")
         
         # Background image
         self.background_image = PhotoImage(file="assets/background.png")

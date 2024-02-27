@@ -1,8 +1,10 @@
 
 from api_calls.openai_api import api_calls
-
+import subprocess
 import re
-
+def find_pip_installed_packages():
+    result = subprocess.run(["pip", "list"], capture_output=True, text=True)
+    return result.stdout
 def extract_code(text):
     """
     Extracts Python code from a given text.
@@ -27,11 +29,11 @@ def extract_code(text):
     code = code.strip()
 
     return code
-
+libraries = find_pip_installed_packages()
 class CodeRefiner:
     def __init__(self):
         pass
-
+    
     def refine_code(self, code, feedback, update_callback):
         try:
             system_message = """
@@ -73,6 +75,8 @@ This code must be:
 - The code should be a testament to your skill, with every line reflecting a commitment to quality.
 - It should serve as a robust, fully-realized implementation, free of placeholders and inline comments, embodying the best of Python development practices.
 - The code should be a testament to your skill, with every line reflecting a commitment to quality.
+you have the following libraries that you can use:
+{libraries}
 """
             refined_code = api_calls(user_message, system_message)
             refined_code = extract_code(refined_code)

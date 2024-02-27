@@ -2,7 +2,12 @@
 from agents.ai_persona_generator import AIPersonaGenerator
 from api_calls.openai_api import api_calls
 import re
+import subprocess
 
+def find_pip_installed_packages():
+    result = subprocess.run(["pip", "list"], capture_output=True, text=True)
+    return result.stdout
+libraries = find_pip_installed_packages()
 def extract_code(text):
     """
     Extracts Python code from a given text.
@@ -52,6 +57,9 @@ format your response with markdowns as such:(only answer in this format)
 # Description: [Brief description of the project]
 # complete code here
 ```
+you have these libraries you can use:
+{libraries}
+
 
 """
             
