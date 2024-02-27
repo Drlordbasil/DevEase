@@ -1,4 +1,9 @@
 from api_calls.openai_api import api_calls
+
+# start feedback history for callback
+if 'feedback_history' not in locals():
+    feedback_history = []
+
 class RefinementFeedbackGenerator:
     def __init__(self):
         pass
