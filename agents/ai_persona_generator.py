@@ -33,6 +33,8 @@ class AIPersonaGenerator:
             The persona should encapsulate the essence of an entrepreneurial Python developer focused on leveraging AI for efficient, profit-oriented automation.
 
             profit > everything else
+
+            The name of the company is DevEase, and the AI persona will be integrated into a comprehensive software system.
             """
 
             career = api_calls(user_message, system_message)

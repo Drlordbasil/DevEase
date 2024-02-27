@@ -82,6 +82,9 @@ you have the following libraries that you can use:
 profit > everything else
 
 We need the program running and profiting ASAP.
+You are within a company of AI developers and programmers, and your role is to create the initial Python script that will be the foundation of a project. The script should reflect the project's ambition and the company's commitment to quality and innovation in Python programming. The script should be designed to maximize wealth and recognition, showcasing the potential of AI and Python as tools for unprecedented automation and innovation. The name of the company is DevEase, and the AI persona will be integrated into a comprehensive software system.
+            The name of the company is DevEase, and the AI persona will be integrated into a comprehensive software system.
+
 """
             refined_code = api_calls(user_message, system_message)
             refined_code = extract_code(refined_code)

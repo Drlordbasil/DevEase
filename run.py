@@ -11,10 +11,10 @@ from agents.feedback_gen import RefinementFeedbackGenerator
 from agents.code_creation import CodeCreator
 from agents.idea_generator import IdeaGenerator
 from agents.adaptive_scripter import AdaptiveScripter
-from agents.file_manager import get_file_name, add_current_code_to_file
 from agents.code_refinement import CodeRefiner
 from code_exe import CodeExecutor
 from agents.CEO_persona import CEO
+from tkinter import messagebox
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -133,7 +133,6 @@ class Application:
             messagebox.showinfo("Info", "No code available to execute.")    
             return
         threading.Thread(target=self.code_exec.execute_code, args=(self.current_code, self.log_message)).start()
-        self.update_text_area(self.code_text, self.current_code)
 
     def refine_code(self):
         self.update_text_area(self.feedback_text, self.current_feedback)
@@ -191,9 +190,10 @@ class Application:
         self.master.quit()
         self.master.destroy()
     def update_text_area(self, text_widget, content):
-        text_widget.delete(1.0, END)  # Clear the current content
-        text_widget.insert(END, content)  # Insert the new content
-
+        if content is not None:  # Check if content is not None
+            text_widget.insert(END, str(content))  # Convert content to string before inserting
+        else:
+            print("Warning: content is None")
 if __name__ == "__main__":
     root = Tk()
     root.anchor = "center"

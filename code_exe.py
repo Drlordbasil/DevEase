@@ -11,7 +11,7 @@ class CodeExecutor:
                 file.write(code)
             #subprocess.run(["pip", "install", imports], capture_output=True, text=True)
             result = subprocess.run(["python", "Scripts/temp_code.py"], capture_output=True, text=True, timeout=15)
-            feedback = RefinementFeedbackGenerator().generate_feedback(code, update_callback)
+            feedback = RefinementFeedbackGenerator().generate_feedback(code+result, update_callback)
             update_callback(f"Feedback: {feedback}")
             if result.returncode == 0:
                 update_callback(f"Execution Output: {result.stdout}")

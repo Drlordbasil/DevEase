@@ -1,5 +1,5 @@
 from openai import OpenAI
-from memory.basicshortmemory import BasicShortMemory
+
 
 
 # Initialize OpenAI

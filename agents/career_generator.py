@@ -25,7 +25,10 @@ class CareerGenerator:
             - Detail the essential skills and experiences required, ensuring alignment with AI-driven content creation and automation technologies.
 
             This persona should only care about making money, nothing else. The career path should be designed to maximize wealth and recognition, showcasing the potential of AI and Python as tools for unprecedented automation and innovation.
-            """
+            The name of the company is DevEase, and the AI persona will be integrated into a comprehensive software system.
+
+            
+              """
 
             career = api_calls(user_message, system_message)
             update_callback(f"Generated Career: {career}")
