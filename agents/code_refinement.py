@@ -30,6 +30,8 @@ def extract_code(text):
 
     return code
 libraries = find_pip_installed_packages()
+feedback = ""
+
 class CodeRefiner:
     def __init__(self):
         pass

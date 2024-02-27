@@ -129,13 +129,14 @@ class Application:
         self.update_text_area(self.code_text, self.current_code)
 
     def refine_code(self):
+        self.update_text_area(self.feedback_text, self.current_feedback)
         if not self.current_code.strip():
             messagebox.showinfo("Info", "No code available to refine.")
             return
         threading.Thread(target=self.code_refiner.refine_code, args=(self.current_code, self.current_feedback, self.log_message)).start()
         threading.Thread(target=self.code_exec.execute_code, args=(self.current_code, self.log_message)).start()
         self.update_text_area(self.code_text, self.current_code)
-        self.update_text_area(self.feedback_text, self.current_feedback)
+        
     def save_final_code(self):
         self.update_text_area(self.code_text, self.current_code)
         

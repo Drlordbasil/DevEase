@@ -42,12 +42,7 @@ class CodeCreator:
         try:
             system_message = persona
             user_message = f"""
-Given the project idea: '{idea}', I request the creation of an initial Python script that embodies this concept. The script should include:
-
-- A clear and concise header comment describing the program and its purpose.
-- Necessary imports that are crucial for the implementation.
-- Definition of classes and functions, each accompanied by a brief comment on its role within the program.
-- A complete program code that integrates all components into a functioning whole, demonstrating real-world application and logic.
+Given the project idea: '{idea}', I request the creation of an initial Python script that embodies this concept. 
 
 This script is the foundation of our project, reflecting both the project's ambition and our commitment to quality and innovation in Python programming.
 
@@ -62,7 +57,10 @@ you have these libraries you can use:
 profit > everything else
 you must make money with this code
 
+common error:
+    self.model = keras.models.load_model(model_path)
 
+ValueError: File format not supported: filepath=path_to_model. Keras 3 only supports V3 `.keras` files and legacy H5 format files (`.h5` extension). Note that the legacy SavedModel format is not supported by `load_model()` in Keras 3. In order to reload a TensorFlow SavedModel as an inference-only layer in Keras 3, use `keras.layers.TFSMLayer(path_to_model, call_endpoint='serving_default')` (note that your `call_endpoint` might have a different name).
 """
             
             initial_code = api_calls(user_message, system_message)
