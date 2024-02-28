@@ -18,8 +18,6 @@ from tkinter import messagebox
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-
-
 class Application:
     def __init__(self, master):
         self.master = master
@@ -30,15 +28,11 @@ class Application:
         self.background_label = Label(master, image=self.background_image)
         self.background_label.place(x=0, y=0, relwidth=1, relheight=1)
 
-
-
-
-
         self.log = Text(master, height=25, width=100, wrap="word", bg="#111111", fg="#00FF00", insertbackground="#00FF00")
-        self.scrollbar = Scrollbar(master, command=self.log.yview, orient=VERTICAL, troughcolor="#111111")
-        self.log.configure(yscrollcommand=self.scrollbar.set)
-        self.log.grid(row=1, column=0, columnspan=3, sticky="nsew")
-        self.scrollbar.grid(row=1, column=3, sticky="ns")
+        #self.scrollbar = Scrollbar(master, command=self.log.yview, orient=VERTICAL, troughcolor="#111111")
+        #self.log.configure(yscrollcommand=self.scrollbar.set)
+        #self.log.grid(row=1, column=0, columnspan=3, sticky="nsew")
+        #self.scrollbar.grid(row=1, column=3, sticky="ns")
 
         # Setup for idea, code, and feedback Text and Scrollbar widgets
         self.setup_labeled_text_area("Current Idea", 2, 0)
@@ -63,11 +57,10 @@ class Application:
         self.current_image = ""
         self.current_ceo_message = ""
 
-
-        
         self.idea_text, self.idea_scrollbar = self.setup_labeled_text_area("Current Idea", 2, 0)
         self.code_text, self.code_scrollbar = self.setup_labeled_text_area("Current Code", 2, 1)
         self.feedback_text, self.feedback_scrollbar = self.setup_labeled_text_area("Current Feedback", 2, 2)
+        self.ceo_message, self.ceo_scrollbar = self.setup_labeled_text_area("CEO Message", 2, 3)
         
 
 
@@ -90,12 +83,12 @@ class Application:
         button_frame = Frame(self.master, background="black")
         button_frame.grid(row=3, column=0, columnspan=4, padx=5, pady=5, sticky="ew")
 
-        self.generate_idea_button = Button(button_frame, text="Generate Project Idea", command=self.generate_idea, bg="#111111", fg="#00FF00")
+        self.generate_idea_button = Button(button_frame, text="Generate Project Idea with initial code", command=self.generate_idea, bg="#111111", fg="#00FF00")
         self.execute_code_button = Button(button_frame, text="Execute Code", command=self.execute_code, bg="#111111", fg="#00FF00")
-        self.refine_code_button = Button(button_frame, text="Refine Code", command=self.refine_code, bg="#111111", fg="#00FF00")
+        self.refine_code_button = Button(button_frame, text="Refine Code and get feedback", command=self.refine_code, bg="#111111", fg="#00FF00")
         self.save_final_code_button = Button(button_frame, text="Save Final Code", command=self.save_final_code, bg="#111111", fg="#00FF00")
-        self.auto_generate_button = Button(button_frame, text="Auto Generate Program", command=self.on_auto_generate_button_click, bg="#111111", fg="#00FF00")
-        self.adaptive_test_button = Button(button_frame, text="Adaptive Test", command=self.on_adaptive_test_button_click, bg="#111111", fg="#00FF00")
+        self.auto_generate_button = Button(button_frame, text="Auto Generate Program(working but not as expected)", command=self.on_auto_generate_button_click, bg="#111111", fg="#00FF00")
+        self.adaptive_test_button = Button(button_frame, text="Adaptive Test(Adding later)", command=self.on_adaptive_test_button_click, bg="#111111", fg="#00FF00")
 
 
         self.generate_idea_button.pack(side="left", padx=5, pady=5)
@@ -127,6 +120,8 @@ class Application:
             self.current_feedback = self.code_exec.execute_code(self.current_code, self.log_message)
             self.update_text_area(self.code_text, self.current_code)
             self.update_text_area(self.feedback_text, self.current_feedback)
+            self.update_text_area(self.ceo_message, self.current_ceo_message)
+
 
     def execute_code(self):
         if not self.current_code.strip():
@@ -135,7 +130,7 @@ class Application:
         threading.Thread(target=self.code_exec.execute_code, args=(self.current_code, self.log_message)).start()
 
     def refine_code(self):
-        self.update_text_area(self.feedback_text, self.current_feedback)
+        
         if not self.current_code.strip():
             messagebox.showinfo("Info", "No code available to refine.")
             return
@@ -164,6 +159,7 @@ class Application:
         threading.Thread(target=self.generate_feedback).start()
         self.update_text_area(self.feedback_text, self.current_feedback)
         self.current_ceo_message = self.CEO.review_employee("CodeRefiner", self.current_feedback)
+        self.update_text_area(self.ceo_message, self.current_ceo_message)
 
 
     def auto_generate(self):
@@ -200,3 +196,5 @@ if __name__ == "__main__":
     app = Application(root)
     
     root.mainloop()
+    root.destroy()
+    root.quit()
