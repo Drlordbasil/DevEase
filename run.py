@@ -55,13 +55,17 @@ class Application:
         self.current_persona = ""
         self.current_ceo_message = ""
         self.current_image = ""
-        self.current_ceo_message = ""
+        self.current_career = ""
 
         self.idea_text, self.idea_scrollbar = self.setup_labeled_text_area("Current Idea", 2, 0)
-        self.code_text, self.code_scrollbar = self.setup_labeled_text_area("Current Code", 2, 1)
+        self.code_text, self.code_scrollbar = self.setup_labeled_text_area("Current Code", 1, 1)
         self.feedback_text, self.feedback_scrollbar = self.setup_labeled_text_area("Current Feedback", 2, 2)
         self.ceo_message, self.ceo_scrollbar = self.setup_labeled_text_area("CEO Message", 2, 3)
-        
+        self.code_text, self.code_scrollbar = self.setup_labeled_text_area("Current Code", 2, 1)
+        self.career_text, self.career_scrollbar = self.setup_labeled_text_area("Current Career", 1, 0)
+        self.persona_text, self.persona_scrollbar = self.setup_labeled_text_area("Current Persona", 1, 2)
+
+
 
 
 
@@ -116,10 +120,14 @@ class Application:
         print(ceo_feedback)
         if idea:
             self.current_idea = idea  # Make sure to update self.current_idea
+            self.update_text_area(self.persona_text, self.log_message)
+
+            self.update_text_area(self.career_text, self.current_career)
+            self.update_text_area(self.idea_text, self.current_idea)  # Now update the text area
             self.current_ceo_message = ceo_feedback # CEO feedback added in loop
             self.update_text_area(self.idea_text, self.current_idea)  # Now update the text area
             self.current_code = self.code_creator.create_initial_code(idea, self.log_message)
-            self.current_feedback = self.generate_feedback(self.current_code, self.log_message)
+            self.current_feedback = self.generate_feedback(self.current_code)
             self.update_text_area(self.code_text, self.current_code)
             self.update_text_area(self.ceo_message, self.current_ceo_message)
             self.update_text_area(self.feedback_text, self.current_feedback)
