@@ -4,7 +4,7 @@ class CEO:
     def __init__(self):
         pass
     
-    def review_employee(self, employee_name, employee_message):
+    def review_employee(self, employee_name, employee_message, update_callback):
         try:
             system_message = """
                 You are the CEO of DevEase, a company specializing in AI program software and AI development.
@@ -22,6 +22,7 @@ class CEO:
                 {employee_name}: {employee_message}
             """
             CEO_feedback = api_calls(user_message, system_message)
+            update_callback(f"CEO Feedback: {CEO_feedback}")
 
             return CEO_feedback
         except Exception as e:

@@ -110,18 +110,19 @@ class Application:
 
     def _generate_idea_and_code(self):
         idea = self.idea_gen.generate_idea(self.log_message)
-        ceo_feedback = self.CEO.review_employee("IdeaGenerator", idea)
+        ceo_feedback = self.CEO.review_employee("IdeaGenerator", idea, update_callback=self.log_message)
+        feedback = self.current_feedback if self.current_feedback else ""
+
         print(ceo_feedback)
         if idea:
             self.current_idea = idea  # Make sure to update self.current_idea
             self.current_ceo_message = ceo_feedback # CEO feedback added in loop
             self.update_text_area(self.idea_text, self.current_idea)  # Now update the text area
             self.current_code = self.code_creator.create_initial_code(idea, self.log_message)
-            self.current_feedback = self.code_exec.execute_code(self.current_code, self.log_message)
+            self.current_feedback = self.generate_feedback(self.current_code, self.log_message)
             self.update_text_area(self.code_text, self.current_code)
-            self.update_text_area(self.feedback_text, self.current_feedback)
             self.update_text_area(self.ceo_message, self.current_ceo_message)
-
+            self.update_text_area(self.feedback_text, self.current_feedback)
 
     def execute_code(self):
         if not self.current_code.strip():
@@ -134,7 +135,9 @@ class Application:
         if not self.current_code.strip():
             messagebox.showinfo("Info", "No code available to refine.")
             return
-        threading.Thread(target=self.code_refiner.refine_code, args=(self.current_code, self.current_feedback+self.current_ceo_message, self.log_message)).start()
+        feedback = self.current_feedback if self.current_feedback else ""
+        ceo_message = self.current_ceo_message if self.current_ceo_message else ""
+        threading.Thread(target=self.code_refiner.refine_code, args=(self.current_code, feedback + ceo_message, self.log_message)).start()
         threading.Thread(target=self.code_exec.execute_code, args=(self.current_code, self.log_message)).start()
         self.update_text_area(self.code_text, self.current_code)
         
@@ -158,7 +161,7 @@ class Application:
             return
         threading.Thread(target=self.generate_feedback).start()
         self.update_text_area(self.feedback_text, self.current_feedback)
-        self.current_ceo_message = self.CEO.review_employee("CodeRefiner", self.current_feedback)
+        self.current_ceo_message = self.CEO.review_employee("CodeRefiner", self.current_feedback, update_callback=self.log_message)
         self.update_text_area(self.ceo_message, self.current_ceo_message)
 
 
@@ -196,5 +199,3 @@ if __name__ == "__main__":
     app = Application(root)
     
     root.mainloop()
-    root.destroy()
-    root.quit()
