@@ -37,8 +37,8 @@ class AIPersonaGenerator:
             The name of the company is DevEase, and the AI persona will be integrated into a comprehensive software system.
             """
 
-            career = api_calls(user_message, system_message)
-            update_callback(f"Generated Career: {career}")
-            return career
+            persona = api_calls(user_message, system_message)
+            update_callback(f"Generated Career: {persona}")
+            return persona
         except Exception as e:
             update_callback(f"Error generating career: {str(e)}")
