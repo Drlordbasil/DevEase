@@ -127,7 +127,7 @@ class Application:
             self.update_text_area(self.idea_text, self.current_idea)  # Now update the text area
             self.current_ceo_message = ceo_feedback # CEO feedback added in loop
             self.update_text_area(self.idea_text, self.current_idea)  # Now update the text area
-            self.current_code = self.code_creator.create_initial_code(idea, self.log_message)
+            self.current_code = self.code_creator.create_initial_code(idea)
             self.current_feedback = self.generate_feedback(self.current_code)
             self.update_text_area(self.code_text, self.current_code)
             self.update_text_area(self.ceo_message, self.current_ceo_message)
