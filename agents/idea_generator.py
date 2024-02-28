@@ -11,8 +11,8 @@ class IdeaGenerator:
     def __init__(self):
         pass
 
-    def generate_idea(self, update_callback):
-        career = CareerGenerator().generate_career(update_callback)
+    def generate_idea(self):
+        career = CareerGenerator().generate_career()
         
         try:
             system_message=career
@@ -37,8 +37,7 @@ class IdeaGenerator:
             
             idea = api_calls(User_message, system_message)
 
-            update_callback(f"Generated Idea: {idea}")
+            
             return idea
         except Exception as e:
-            update_callback(f"Error generating idea: {str(e)}")
             return ""

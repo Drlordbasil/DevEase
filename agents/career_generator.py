@@ -5,7 +5,7 @@ class CareerGenerator:
     def __init__(self):
         pass
 
-    def generate_career(self, update_callback):
+    def generate_career(self):
         try:
             system_message = """
             You are an advanced AI career advisor, renowned for your analytical prowess and ability to guide AI developers and programmers towards fulfilling and profitable career paths. Your mission is to counsel a Python developer aspiring to merge entrepreneurship with technological innovation, particularly in AI.
@@ -31,8 +31,8 @@ class CareerGenerator:
               """
 
             career = api_calls(user_message, system_message)
-            update_callback(f"Generated Career: {career}")
+            
             return career
         except Exception as e:
-            update_callback(f"Error generating career: {str(e)}")
+            
             return ""

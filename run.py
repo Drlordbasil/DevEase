@@ -114,23 +114,42 @@ class Application:
         threading.Thread(target=self._generate_idea_and_code).start()
 
     def _generate_idea_and_code(self):
-        idea = self.idea_gen.generate_idea(self.log_message)
+        idea = self.idea_gen.generate_idea()
         ceo_feedback = self.CEO.review_employee("IdeaGenerator", idea, update_callback=self.log_message)
-        feedback = self.current_feedback if self.current_feedback else ""
 
-        print(ceo_feedback)
         if idea:
-            self.current_idea = idea  # Make sure to update self.current_idea
-            self.update_text_area(self.persona_text, self.current_persona)
+            self.current_idea = idea  # Update the current idea
+            
+            # Log the generation of the new idea
+            self.log_message(f"New Idea Generated: {idea}")
+            
+            if ceo_feedback:
+                self.current_ceo_message = ceo_feedback  # Update the current CEO message
+                # Log the CEO feedback
+                self.log_message(f"CEO Feedback: {ceo_feedback}")
+            
+            # Update GUI elements with the new idea and CEO feedback
+            self.update_text_area(self.idea_text, self.current_idea, "Current Idea")
+            self.update_text_area(self.ceo_message, self.current_ceo_message, "CEO Message")
+            
+            # Create initial code based on the new idea and CEO feedback
+            self.current_code = self.code_creator.create_initial_code(idea + " " + ceo_feedback, update_callback=self.log_message)
+            self.update_text_area(self.code_text, self.current_code, "Current Code")
+            
+            # Ensure all related GUI elements are updated to reflect the new state
+            self.update_related_gui_elements()
 
-            self.update_text_area(self.career_text, self.current_career)
-            self.update_text_area(self.idea_text, self.current_idea)  # Now update the text area
-            self.current_ceo_message = ceo_feedback # CEO feedback added in loop
-            self.update_text_area(self.idea_text, self.current_idea)  # Now update the text area
-            self.current_code = self.code_creator.create_initial_code(idea+ceo_feedback, update_callback=self.log_message)
-            self.update_text_area(self.code_text, self.current_code)
-            self.update_text_area(self.ceo_message, self.current_ceo_message)
-            self.update_text_area(self.feedback_text, self.current_feedback)
+        else:
+            # Log a message if no idea was generated
+            self.log_message("No idea was generated.")
+
+    def update_related_gui_elements(self):
+        """Updates related GUI elements to reflect the current state."""
+        self.update_text_area(self.persona_text, self.current_persona, "Current Persona")
+        self.update_text_area(self.career_text, self.current_career, "Current Career")
+        self.update_text_area(self.feedback_text, self.current_feedback, "Current Feedback")
+        self.update_text_area(self.code_output_text, self.current_code_output, "Current Code Output")
+
 
     def execute_code(self):
         if not self.current_code.strip():
@@ -139,21 +158,46 @@ class Application:
         threading.Thread(target=self.code_exec.execute_code, args=(self.current_code, self.log_message)).start()
 
     def refine_code(self):
-        
         if not self.current_code.strip():
             messagebox.showinfo("Info", "No code available to refine.")
             return
-        self.update_text_area(self.persona_text, self.current_persona)
 
+        # Consolidate updates to GUI before starting threads for a cleaner look
+        self.pre_refinement_updates()
+
+        # Start refinement in a separate thread to keep GUI responsive
+        threading.Thread(target=self._refine_and_execute_code).start()
+
+    def pre_refinement_updates(self):
+        """Updates GUI with current states before starting the refinement."""
+        self.update_text_area(self.persona_text, self.current_persona)
         self.update_text_area(self.career_text, self.current_career)
-        feedback = self.current_feedback if self.current_feedback else ""
-        ceo_message = self.current_ceo_message if self.current_ceo_message else ""
-        threading.Thread(target=self.code_refiner.refine_code, args=(self.current_code, feedback + ceo_message, self.log_message)).start()
-        threading.Thread(target=self.code_exec.execute_code, args=(self.current_code, self.log_message)).start()
         self.update_text_area(self.code_text, self.current_code)
         self.update_text_area(self.ceo_message, self.current_ceo_message)
         self.update_text_area(self.feedback_text, self.current_feedback)
         self.update_text_area(self.code_output_text, self.current_code_output)
+
+    def _refine_and_execute_code(self):
+        """Handles the code refinement and waits for completion before execution."""
+        feedback = self.current_feedback if self.current_feedback else ""
+        ceo_message = self.current_ceo_message if self.current_ceo_message else ""
+        combined_feedback = f"{feedback} {ceo_message}".strip()
+
+        # Initialize and start the refinement thread
+        refinement_thread = threading.Thread(target=self.code_refiner.refine_code, args=(self.current_code, combined_feedback, self.log_message))
+        refinement_thread.start()
+
+        # Wait for the refinement to complete
+        refinement_thread.join()
+
+        # After refinement is complete, execute the code
+        self.code_exec.execute_code(self.current_code, self.log_message)
+
+        self.update_text_area(self.code_output_text, self.current_code_output, "Code Execution Output")
+
+        # Log completion
+        self.log_message("Code execution completed.")
+
         
         
     def save_final_code(self):
@@ -203,11 +247,14 @@ class Application:
     def on_exit_button_click(self):
         self.master.quit()
         self.master.destroy()
-    def update_text_area(self, text_widget, content):
-        if content is not None:  # Check if content is not None
-            text_widget.insert(END, str(content))  # Convert content to string before inserting
-        else:
-            print("Warning: content is None")
+    def update_text_area(self, text_widget, content, content_description=None):
+        text_widget.delete('1.0', END)  # Clear existing content
+        if content:
+            text_widget.insert(END, content)  # Insert new content
+        if content_description:
+            self.log_message(f"Updated '{content_description}': {content}")
+
+
 if __name__ == "__main__":
     root = Tk()
     root.anchor = "center"
