@@ -26,6 +26,8 @@ class CodeExecutor:
             result = subprocess.run(["python", "Scripts/temp_code.py"], capture_output=True, text=True, timeout=15)
             feedback = RefinementFeedbackGenerator().generate_feedback(code+result, update_callback)
             update_callback(f"Feedback: {feedback}")
+            update_callback(f"Result: {result}")
+            
             if result.returncode == 0:
                 update_callback(f"Execution Output: {result.stdout}")
             else:

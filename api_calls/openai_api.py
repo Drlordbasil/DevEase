@@ -7,7 +7,7 @@ openai = OpenAI()
 
 gpt3 = "gpt-3.5-turbo-16k"
 gpt4 = "gpt-4-0125-preview"
-model = gpt4
+model = gpt3
 
 
 def api_calls(user_message, sys_message):
