@@ -197,6 +197,7 @@ class Application:
 
         # Log completion
         self.log_message("Code execution completed.")
+        self.update_related_gui_elements()
 
         
         
@@ -222,6 +223,8 @@ class Application:
         self.update_text_area(self.feedback_text, self.current_feedback)
         self.current_ceo_message = self.CEO.review_employee("CodeRefiner", self.current_feedback, update_callback=self.log_message)
         self.update_text_area(self.ceo_message, self.current_ceo_message)
+        self.update_related_gui_elements()
+        
 
 
     def auto_generate(self):
@@ -229,7 +232,7 @@ class Application:
         t1.start()
         t1.join()
         self.log_message("Idea gen complete.")
-        self.update_text_area(self.idea_text, self.current_idea)
+        self.update_text_area(self.idea_text, self.current_idea, "Current Idea")
 
         for _ in range(5):
             self.refine_code()
@@ -244,6 +247,8 @@ class Application:
         self.log_message("Auto generation complete.")
     def on_auto_generate_button_click(self):
         threading.Thread(target=self.auto_generate).start()
+        self.update_related_gui_elements()
+
     def on_exit_button_click(self):
         self.master.quit()
         self.master.destroy()
