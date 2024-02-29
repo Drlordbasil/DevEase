@@ -1,4 +1,5 @@
 from openai import OpenAI
+from news_api import get_news
 
 
 
@@ -26,11 +27,12 @@ def api_calls(user_message, sys_message):
     # Validate input
     if not isinstance(user_message, str) or not isinstance(sys_message, str):
         raise ValueError("user_message and sys_message must be strings")
-
+    news = get_news()
     messages = [
         {"role": "system", "content": sys_message},
+        {"role": "assistant", "content": f"here are current news you can read: {news}"},
         {"role": "user", "content": user_message}
-       # {"role": "assistant", "content": history}
+       # 
     ]
 
     try:
