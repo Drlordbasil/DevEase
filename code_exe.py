@@ -1,6 +1,5 @@
-import subprocess
-from agents.feedback_gen import RefinementFeedbackGenerator
 
+import subprocess
 
 
 class CodeExecutor:
@@ -8,7 +7,7 @@ class CodeExecutor:
     A class that executes code, finds installed packages, reads scripts, and checks directory contents.
     """
 
-    def execute_code(self, code, update_callback):
+    def execute_code(self,code):
         """
         Executes the given code and provides feedback.
 
@@ -24,22 +23,12 @@ class CodeExecutor:
                 file.write(code)
             #subprocess.run(["pip", "install", imports], capture_output=True, text=True)
             result = subprocess.run(["python", "Scripts/temp_code.py"], capture_output=True, text=True, timeout=15)
-            feedback = RefinementFeedbackGenerator().generate_feedback(code+result, update_callback)
-            update_callback(f"Feedback: {feedback}")
-            update_callback(f"Result: {result}")
-            
-            if result.returncode == 0:
-                update_callback(f"Execution Output: {result.stdout}")
-            else:
-                update_callback(f"Execution Error: {result.stderr}")
+            code_output = result.stdout
+            return code_output
         except subprocess.TimeoutExpired:
-            update_callback(f"Code execution timed out.")
-            feedback = None
+            return "The code took too long to execute."
         except Exception as e:
-            update_callback(f"An error occurred: {str(e)}")
-            feedback = None
-        finally:
-            return feedback
+            return str(e)
 
     def find_pip_installed_packages(self):
         """
