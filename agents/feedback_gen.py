@@ -1,14 +1,11 @@
-from api_calls.openai_api import api_calls
 
-# start feedback history for callback
-if 'feedback_history' not in locals():
-    feedback_history = []
+
 
 class RefinementFeedbackGenerator:
     def __init__(self):
         pass
 
-    def generate_feedback(self,code, update_callback):
+    def generate_feedback(self,api_calls,code):
         try:
             system_message = """
             As an expert in code review and refinement, your task is to generate constructive feedback for the provided Python code. Your feedback should be detailed, pinpointing both strengths and areas for improvement, with a focus on enhancing code quality, efficiency, and readability. Your role is crucial in aiding AI team members to elevate their coding practices. Consider aspects such as code structure, adherence to Python conventions, optimization opportunities, and potential bugs. Aim to foster a collaborative environment that encourages learning and continuous improvement.
@@ -34,8 +31,8 @@ class RefinementFeedbackGenerator:
             """
             
             feedback = api_calls(user_message, system_message)
-            update_callback(f"Generated Feedback: {feedback}")
+            
             return feedback
         except Exception as e:
-            update_callback(f"Error generating feedback: {str(e)}")
+            print(f"Error generating feedback: {str(e)}")
             return ""

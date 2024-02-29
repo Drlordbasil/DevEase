@@ -1,7 +1,4 @@
 
-from agents.ai_persona_generator import AIPersonaGenerator
-
-from api_calls.openai_api import api_calls
 import re
 import subprocess
 
@@ -38,8 +35,8 @@ class CodeCreator:
     def __init__(self):
         pass
 
-    def create_initial_code(self, idea, update_callback):
-        persona = AIPersonaGenerator().generate_persona(update_callback)
+    def create_initial_code(self, api_calls,persona,idea):
+        
         try:
             system_message = persona
             user_message = f"""
@@ -70,11 +67,8 @@ You are within a company of AI developers and programmers, and your role is to c
             
             initial_code = api_calls(user_message, system_message)
             initial_code = extract_code(initial_code)
-            update_callback(f"Initial Code: {initial_code}")
-            update_callback(f"Persona: {persona}")
-            update_callback(f"Idea: {idea}")
-            update_callback(f"current code: {initial_code}")
+
             return initial_code
         except Exception as e:
-            update_callback(f"Error creating initial code: {str(e)}")
+            
             return ""

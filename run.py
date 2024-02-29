@@ -15,6 +15,8 @@ from agents.code_refinement import CodeRefiner
 from code_exe import CodeExecutor
 from agents.CEO_persona import CEO
 from tkinter import messagebox
+from agents.career_generator import CareerGenerator
+from agents.ai_persona_generator import AIPersonaGenerator
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -38,17 +40,23 @@ class Application:
         self.setup_labeled_text_area("Current Idea", 2, 0)
         self.setup_labeled_text_area("Current Code", 2, 1)
         self.setup_labeled_text_area("Current Feedback", 2, 2)
-
+        
         # Buttons
         self.setup_buttons()
         self.image_gen = ImageGen()
+        self.idea_persona_gen = AIPersonaGenerator()
+        
+        self.career_gen = CareerGenerator()
+        
         self.idea_gen = IdeaGenerator()
         self.code_creator = CodeCreator()
         self.code_exec = CodeExecutor()
         self.code_refiner = CodeRefiner()
         self.adaptive_scripter = AdaptiveScripter()
+        self.feedback_gen = RefinementFeedbackGenerator()
         self.CEO = CEO()
-
+        self.career = self.career_gen.generate_career(api_calls)
+        self.persona = self.idea_persona_gen.generate_persona(api_calls)
         self.current_idea = ""
         self.current_code = ""  
         self.current_feedback = ""
@@ -57,6 +65,7 @@ class Application:
         self.current_image = ""
         self.current_career = ""
         self.current_code_output = ""
+
 
         self.idea_text, self.idea_scrollbar = self.setup_labeled_text_area("Current Idea", 2, 0)
         self.code_text, self.code_scrollbar = self.setup_labeled_text_area("Current Code", 1, 1)
@@ -114,7 +123,7 @@ class Application:
         threading.Thread(target=self._generate_idea_and_code).start()
 
     def _generate_idea_and_code(self):
-        idea = self.idea_gen.generate_idea()
+        idea = self.idea_gen.generate_idea(api_calls,career=self.career)
         ceo_feedback = self.CEO.review_employee("IdeaGenerator", idea, update_callback=self.log_message)
 
         if idea:
@@ -133,9 +142,12 @@ class Application:
             self.update_text_area(self.ceo_message, self.current_ceo_message, "CEO Message")
             
             # Create initial code based on the new idea and CEO feedback
-            self.current_code = self.code_creator.create_initial_code(idea + " " + ceo_feedback, update_callback=self.log_message)
+            self.current_code = self.code_creator.create_initial_code(api_calls, self.persona, self.current_idea)
             self.update_text_area(self.code_text, self.current_code, "Current Code")
-            
+            self.current_feedback = self.feedback_gen.generate_feedback(api_calls, self.current_code)
+            self.update_text_area(self.feedback_text, self.current_feedback, "Current Feedback")
+            self.current_ceo_message = self.CEO.review_employee("CodeCreator", self.current_code, update_callback=self.log_message)
+            self.update_text_area(self.ceo_message, self.current_ceo_message, "CEO Message")
             # Ensure all related GUI elements are updated to reflect the new state
             self.update_related_gui_elements()
 
@@ -145,10 +157,14 @@ class Application:
 
     def update_related_gui_elements(self):
         """Updates related GUI elements to reflect the current state."""
-        self.update_text_area(self.persona_text, self.current_persona, "Current Persona")
-        self.update_text_area(self.career_text, self.current_career, "Current Career")
+        self.update_text_area(self.persona_text, self.persona, "Current Persona")
+        self.update_text_area(self.career_text, self.career, "Current Career")
         self.update_text_area(self.feedback_text, self.current_feedback, "Current Feedback")
         self.update_text_area(self.code_output_text, self.current_code_output, "Current Code Output")
+        self.update_text_area(self.ceo_message, self.current_ceo_message, "CEO Message")
+        self.update_text_area(self.idea_text, self.current_idea, "Current Idea")
+        self.update_text_area(self.code_text, self.current_code, "Current Code")
+
 
 
     def execute_code(self):
@@ -156,7 +172,7 @@ class Application:
             messagebox.showinfo("Info", "No code available to execute.")    
             return
         threading.Thread(target=self.code_exec.execute_code, args=(self.current_code, self.log_message)).start()
-
+        
     def refine_code(self):
         if not self.current_code.strip():
             messagebox.showinfo("Info", "No code available to refine.")
@@ -170,8 +186,8 @@ class Application:
 
     def pre_refinement_updates(self):
         """Updates GUI with current states before starting the refinement."""
-        self.update_text_area(self.persona_text, self.current_persona)
-        self.update_text_area(self.career_text, self.current_career)
+        self.update_text_area(self.persona_text, self.persona)
+        self.update_text_area(self.career_text, self.career)
         self.update_text_area(self.code_text, self.current_code)
         self.update_text_area(self.ceo_message, self.current_ceo_message)
         self.update_text_area(self.feedback_text, self.current_feedback)
@@ -179,10 +195,12 @@ class Application:
 
     def _refine_and_execute_code(self):
         """Handles the code refinement and waits for completion before execution."""
-        feedback = self.current_feedback if self.current_feedback else ""
+        feedback = self.feedback_gen.generate_feedback(api_calls, self.current_code)
+        self.current_feedback = feedback if feedback else ""
+
         ceo_message = self.current_ceo_message if self.current_ceo_message else ""
         combined_feedback = f"{feedback} {ceo_message}".strip()
-
+        self.pre_refinement_updates()
         # Initialize and start the refinement thread
         refinement_thread = threading.Thread(target=self.code_refiner.refine_code, args=(self.current_code, combined_feedback, self.log_message))
         refinement_thread.start()

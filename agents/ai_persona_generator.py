@@ -1,9 +1,9 @@
-from api_calls.openai_api import api_calls
+
 class AIPersonaGenerator:
     def __init__(self):
         pass
 
-    def generate_persona(self, update_callback):
+    def generate_persona(self, api_calls):
         try:
 
             system_message = """
@@ -38,7 +38,8 @@ class AIPersonaGenerator:
             """
 
             persona = api_calls(user_message, system_message)
-            update_callback(f"Generated Persona: {persona}")
+            
             return persona
         except Exception as e:
-            update_callback(f"Error generating career: {str(e)}")
+                
+                return ""

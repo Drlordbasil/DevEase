@@ -1,11 +1,11 @@
-from api_calls.openai_api import api_calls
+
 
 
 class CareerGenerator:
     def __init__(self):
         pass
 
-    def generate_career(self):
+    def generate_career(self,api_calls):
         try:
             system_message = """
             You are an advanced AI career advisor, renowned for your analytical prowess and ability to guide AI developers and programmers towards fulfilling and profitable career paths. Your mission is to counsel a Python developer aspiring to merge entrepreneurship with technological innovation, particularly in AI.

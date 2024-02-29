@@ -1,6 +1,4 @@
 
-from api_calls.openai_api import api_calls
-from agents.career_generator import CareerGenerator
 import subprocess
 
 def find_pip_installed_packages():
@@ -11,8 +9,8 @@ class IdeaGenerator:
     def __init__(self):
         pass
 
-    def generate_idea(self):
-        career = CareerGenerator().generate_career()
+    def generate_idea(self,api_calls,career):
+        
         
         try:
             system_message=career
