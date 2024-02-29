@@ -40,31 +40,19 @@ class CodeCreator:
         try:
             system_message = persona
             user_message = f"""
-Given the project idea: '{idea}', I request the creation of an initial Python script that embodies this concept. 
+            Given the project idea: '{idea}', please create an initial Python script that embodies this concept. The script should include the following elements:
 
-This script is the foundation of our project, reflecting both the project's ambition and our commitment to quality and innovation in Python programming and give yourself creative freedom.
+            1. Necessary imports: Include any required libraries and modules.
+            2. Classes and functions: Define the classes and functions needed to implement the project's functionality.
+            3. Main logic: Implement the main logic of the script, ensuring that it is fully functional and adheres to best practices.
 
-format your response with markdowns as such:(only answer in this format)
-```python
-# Project Name: [Name of the project]
-# Description: [Brief description of the project]
-# complete code here without any placeholders as each function must be fully implemented
-# you can use the libraries below
-# do not add comments
-# do not use placeholders
-
-```
-
-profit and full code > everything else
-full code is the only thing that matters when making money
-if you dont send full ready-to-use code, you are not making money
-if you send full ready-to-use code,
-you are making money
-you must make money with this code
-
-
-
-"""
+            Please format your response using markdown as follows:
+            '''python
+            # Project Name: [Name of the project]
+            # Description: [Brief description of the project]
+            # Complete code here without any placeholders or comments
+            '''
+            """
             
             initial_code = api_calls(user_message, system_message)
             initial_code = extract_code(initial_code)

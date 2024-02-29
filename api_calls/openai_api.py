@@ -8,7 +8,7 @@ openai = OpenAI()
 
 gpt3 = "gpt-3.5-turbo-16k"
 gpt4 = "gpt-4-0125-preview"
-model = gpt3
+model = gpt4
 
 
 def api_calls(user_message, sys_message):
@@ -30,7 +30,7 @@ def api_calls(user_message, sys_message):
     news = get_news()
     messages = [
         {"role": "system", "content": sys_message},
-        {"role": "assistant", "content": f"here are current news you can read: {news}"},
+        #{"role": "assistant", "content": f"here are current news you can read: {news}"},
         {"role": "user", "content": user_message}
        # 
     ]
@@ -39,7 +39,7 @@ def api_calls(user_message, sys_message):
         response = openai.chat.completions.create(
             model=model,
             messages=messages,
-            temperature=0.7
+            temperature=0
         )
     except Exception as e:
         raise RuntimeError("Failed to make API call: " + str(e))
