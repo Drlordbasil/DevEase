@@ -126,7 +126,7 @@ class Application:
             self.update_text_area(self.idea_text, self.current_idea, "Current Idea")
             self.update_text_area(self.ceo_message, self.current_ceo_message, "CEO Message")
             
-            self.current_code = self.code_creator.create_initial_code(api_calls, self.persona, self.current_idea)
+            self.current_code = self.code_creator.create_initial_code(api_calls, self.persona, self.current_idea+ceo_feedback)
             self.update_text_area(self.code_text, self.current_code, "Current Code")
             self.current_feedback = self.feedback_gen.generate_feedback(api_calls, self.current_code)
             self.update_text_area(self.feedback_text, self.current_feedback, "Current Feedback")

@@ -1,5 +1,5 @@
-
 import subprocess
+import ast
 
 
 class CodeExecutor:
@@ -7,26 +7,27 @@ class CodeExecutor:
     A class that executes code, finds installed packages, reads scripts, and checks directory contents.
     """
 
-    def execute_code(self,code):
+    def execute_code(self, code):
         """
         Executes the given code and provides feedback.
 
         Args:
             code (str): The code to be executed.
-            update_callback (function): A callback function to update the feedback.
 
         Returns:
             str: The feedback generated during code execution.
         """
         try:
+            ast.parse(code)  # Validate the code syntax
             with open("Scripts/temp_code.py", "w") as file:
                 file.write(code)
-            #subprocess.run(["pip", "install", imports], capture_output=True, text=True)
             result = subprocess.run(["python", "Scripts/temp_code.py"], capture_output=True, text=True, timeout=15)
             code_output = result.stdout
             return code_output
         except subprocess.TimeoutExpired:
             return "The code took too long to execute."
+        except SyntaxError as e:
+            return f"SyntaxError: {str(e)}"
         except Exception as e:
             return str(e)
 
@@ -62,5 +63,3 @@ class CodeExecutor:
         """
         result = subprocess.run(["ls"], capture_output=True, text=True)
         return result.stdout
-
-    
