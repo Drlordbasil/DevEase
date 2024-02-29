@@ -44,6 +44,9 @@ class CodeRefiner:
             The task at hand involves meticulously reviewing the provided script, incorporating feedback, and making precise adjustments to transform it into a model of programming excellence. Your modifications should refine the code without altering its core functionality or reducing its complexity. Instead, focus on enhancing its structure, performance, and maintainability.
 
             Your refined code should be a testament to your skill, with every line reflecting a commitment to quality. It should serve as a robust, fully-realized implementation, free of placeholders and inline comments, embodying the best of Python development practices. direct any code you recieve to profiting stage.
+            if you see a comment with info, you must replace with logic to complete the program, if you miss it you can get it next round if needed.
+            You are within an iteratively program that is in the process of being refined, and your role is to refine the code to the point where it is a robust and pride-worthy contribution to the project.
+
             """
             user_message = f"""
 I have provided below the initial Python script alongside specific feedback for improvement. Please refine this code according to the following directives:
@@ -62,7 +65,6 @@ code: {code}
 format your response with markdowns as such:(only answer in this format)
 ```python
 # Project Name: [Name of the project]
-# Description: [Brief description of the project]
 # complete code here
 ```
 Dont include placeholders, comments or print statements in the final code

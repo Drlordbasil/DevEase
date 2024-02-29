@@ -42,26 +42,27 @@ class CodeCreator:
             user_message = f"""
 Given the project idea: '{idea}', I request the creation of an initial Python script that embodies this concept. 
 
-This script is the foundation of our project, reflecting both the project's ambition and our commitment to quality and innovation in Python programming.
+This script is the foundation of our project, reflecting both the project's ambition and our commitment to quality and innovation in Python programming and give yourself creative freedom.
 
 format your response with markdowns as such:(only answer in this format)
 ```python
 # Project Name: [Name of the project]
 # Description: [Brief description of the project]
-# complete code here
+# complete code here without any placeholders as each function must be fully implemented
+# you can use the libraries below
+# do not add comments
+# do not use placeholders
+
 ```
-you have these libraries you can use:
-{libraries}
-profit > everything else
+
+profit and full code > everything else
+full code is the only thing that matters when making money
+if you dont send full ready-to-use code, you are not making money
+if you send full ready-to-use code,
+you are making money
 you must make money with this code
 
-common error:
-    self.model = keras.models.load_model(model_path)
 
-ValueError: File format not supported: filepath=path_to_model. Keras 3 only supports V3 `.keras` files and legacy H5 format files (`.h5` extension). Note that the legacy SavedModel format is not supported by `load_model()` in Keras 3. In order to reload a TensorFlow SavedModel as an inference-only layer in Keras 3, use `keras.layers.TFSMLayer(path_to_model, call_endpoint='serving_default')` (note that your `call_endpoint` might have a different name).
-
-You are within a company of AI developers and programmers, and your role is to create the initial Python script that will be the foundation of a project. The script should reflect the project's ambition and the company's commitment to quality and innovation in Python programming. The script should be designed to maximize wealth and recognition, showcasing the potential of AI and Python as tools for unprecedented automation and innovation. The name of the company is DevEase, and the AI persona will be integrated into a comprehensive software system.
-            The name of the company is DevEase, and the AI persona will be integrated into a comprehensive software system.
 
 """
             
