@@ -60,8 +60,8 @@ class Application:
 
 
         self.idea_text, self.idea_scrollbar = self.setup_labeled_text_area("Current Idea", 2, 0)
-        self.code_text, self.code_scrollbar = self.setup_labeled_text_area("Current Code", 1, 1)
-        self.feedback_text, self.feedback_scrollbar = self.setup_labeled_text_area("Current Feedback", 2, 2)
+        self.code_text, self.code_scrollbar = self.setup_labeled_text_area("Current Code", 2, 2)
+        self.feedback_text, self.feedback_scrollbar = self.setup_labeled_text_area("Current Feedback", 1, 1)
         self.ceo_message, self.ceo_scrollbar = self.setup_labeled_text_area("CEO Message", 2, 3)
         self.code_output_text, self.code_output_scrollbar = self.setup_labeled_text_area("Current Code Output(to be added)", 2, 1)
         self.career_text, self.career_scrollbar = self.setup_labeled_text_area("Current Career for Idea Gen", 1, 0)
