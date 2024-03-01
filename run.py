@@ -15,6 +15,7 @@ from agents.code_refinement import CodeRefiner
 from code_exe import CodeExecutor
 from agents.CEO_persona import CEO
 from tkinter import messagebox
+from agents.file_manager import FileManager
 
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -37,7 +38,7 @@ class Application:
         self.image_gen = ImageGen()
 
         
-        
+        self.file_manager = FileManager()
         self.idea_gen = IdeaGenerator()
         self.code_creator = CodeCreator()
         self.code_exec = CodeExecutor()
@@ -184,15 +185,9 @@ class Application:
         self.update_related_gui_elements()
         
 
-        time = datetime.now().strftime("%Y%m%d%H%M%S")
-        if not self.current_code.strip():
-            messagebox.showinfo("Info", "No code available to save.")
-            return
-        file = f"Scripts/final_code{time}.py"
-        with open(file, "w") as file:
-            file.write(self.current_code)
+        file_name = self.file_manager.save_mod_file(self.current_code)
         
-        messagebox.showinfo("Info", f"Final code saved")
+        messagebox.showinfo("Info", f"Final code saved as {file_name}")
 
     def generate_feedback(self):
         if not self.current_code.strip():

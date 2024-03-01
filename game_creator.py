@@ -1,3 +1,4 @@
+import json
 import re
 import os
 import subprocess
@@ -13,7 +14,7 @@ class CodeUtils:
         os.system(f"pip install {packages}")
         
     def find_pip_installed_packages(self):
-        result = subprocess.run(["pip", "list"], capture_output=True, text=True)
+        result = subprocess.run(["pip", "list"], capture_output=True, text=True,timeout=20)
         return result.stdout
     
     def extract_code(self, text):
@@ -40,12 +41,27 @@ class CodeUtils:
         code = code.strip()
 
         return code
+    def run_and_get_output(self, code):
+        try:
+            result = subprocess.run(["python", "-c", code], capture_output=True, text=True, timeout=20)
+            return {
+                'stdout': result.stdout,
+                'stderr': result.stderr,
+                'returncode': result.returncode
+            }
+        except subprocess.TimeoutExpired:
+            return {
+                'stdout': '',
+                'stderr': 'Execution timed out',
+                'returncode': -1
+            }
+    
     def name_file(self,code):
         name = api_calls(f" The code is {code} Create a filename with ext as follows only as your response: <filename>.<ext>", "You simply create file names that will be saved.")
         return name   
     def save_mod_file(self, content):
         file = self.name_file(content)
-        with open(f"Scripts/{file}", "w") as f:
+        with open(f"workspace/{file}", "w") as f:
             f.write(content)
         return file
     
@@ -55,7 +71,7 @@ class Dynamic_api_agents:
         self.image_gen = ImageGen()
 
     def generate_idea(self):
-        idea = api_calls("create a kivy based android video game idea in python.", "You are a python coding expert. You generate a full idea that is doable by current AI chatbots. You prompt AI to do it as your response.")
+        idea = api_calls("create a kivy based android video game idea in python that is fun to play, with complete detailed steps. Demand full scripts", "You are a python coding expert. You generate a full idea that is doable by current AI chatbots. You prompt AI to do it as your response.")
         return idea
     def generate_code(self, idea):
         code = api_calls(f"NEVER INCLUDE STATEMENTS LIKE PASS OR ADD PLACEHOLDERS AS IT MAKES THE PROCESS OF REFINEMENT SLOWER!!! Create a python script using kivy for android games(dont include custom images since you cant create the images) that will implement the idea: '{idea}' response with markdowns as such '''python <code> '''", "You are a python coding expert. You generate a full script on the first try, removing all # inline comments or placeholders to make the script clear.")
@@ -78,11 +94,18 @@ if __name__ == "__main__":
     print(f"Idea generated: {idea}")
     code = api.generate_code(idea)
     print(f"Code generated: {code}")
+    code_output = api.code_utils.run_and_get_output(code)
+    print(f"Code output: {code_output}")
 
-    ceo_feedback = api.ceo_review(idea, code)
+
+
+    ceo_feedback = api.ceo_review(idea, code + json.dumps(code_output))
     print(f"CEO feedback: {ceo_feedback}")
-    refined_code = api.refine_code(code, ceo_feedback)
+    refined_code = api.refine_code(code, ceo_feedback + json.dumps(code_output))
     refined_code = CodeUtils().extract_code(refined_code)
+    code_output = api.code_utils.run_and_get_output(refined_code)
+    print(f"Code output: {code_output}")
+
     file = api.save_file(refined_code)
     
     print(f"File saved as {file}")
