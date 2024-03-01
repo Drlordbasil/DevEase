@@ -58,14 +58,14 @@ class Dynamic_api_agents:
         idea = api_calls("create a kivy based android video game idea in python.", "You are a python coding expert. You generate a full idea that is doable by current AI chatbots. You prompt AI to do it as your response.")
         return idea
     def generate_code(self, idea):
-        code = api_calls(f"Create a python script using kivy for android games(dont include custom images since you cant create the images) that will implement the idea: '{idea}' response with markdowns as such '''python <code> '''", "You are a python coding expert. You generate a full script on the first try, removing all # inline comments or placeholders to make the script clear.")
+        code = api_calls(f"NEVER INCLUDE STATEMENTS LIKE PASS OR ADD PLACEHOLDERS AS IT MAKES THE PROCESS OF REFINEMENT SLOWER!!! Create a python script using kivy for android games(dont include custom images since you cant create the images) that will implement the idea: '{idea}' response with markdowns as such '''python <code> '''", "You are a python coding expert. You generate a full script on the first try, removing all # inline comments or placeholders to make the script clear.")
         code = self.code_utils.extract_code(code)
         return code
     def ceo_review(self,idea,code):
-        ceo_feedback = api_calls(f"Review the code: '{code}' and the idea: '{idea}' and give feedback.", "You are the CEO of DevEase a program that is full of AI team members, you are the CEO of these team members. You will always direct the AI team to completing their projects quicker and more accurately. Your team cannot create images or sound, so dont ask them to add custom files that arent logic within the script they are working on. They cannot use images that dont exit or sound files.")
+        ceo_feedback = api_calls(f"Review the code: '{code}' and the idea: '{idea}' and give feedback. They should never include placeholders or images/sound files that they cant load via python libraries.", "You are the CEO of DevEase a program that is full of AI team members, you are the CEO of these team members. You will always direct the AI team to completing their projects quicker and more accurately. Your team cannot create images or sound, so dont ask them to add custom files that arent logic within the script they are working on. They cannot use images that dont exit or sound files.")
         return ceo_feedback
     def refine_code(self, code, ceo_feedback):
-        refined_code = api_calls(f"Refine the code:(dont include custom images/paths since you cant create the images) '{code}'(dont include custom images since you cant create the images) with the feedback from your CEO: '{ceo_feedback}'", "You are within an iteratively program that is in the process of being refined, and your role is to refine the code to the point where it is a robust and pride-worthy contribution to the project. You are a coder from DevEase, and you are refining the code to make it more profitable by making it work on first try.")
+        refined_code = api_calls(f" NEVER INCLUDE STATEMENTS LIKE PASS OR ADD PLACEHOLDERS AS IT MAKES THE PROCESS OF REFINEMENT SLOWER!!! Refine the code:(dont include custom images/paths since you cant create the images) '{code}'(dont include custom images since you cant create the images) with the feedback from your CEO: '{ceo_feedback}'", "You are within an iteratively program that is in the process of being refined, and your role is to refine the code to the point where it is a robust and pride-worthy contribution to the project. You are a coder from DevEase, and you are refining the code to make it more profitable by making it work on first try.")
         return refined_code
     def save_file(self, content):
         file = self.code_utils.save_mod_file(content)
@@ -83,13 +83,7 @@ if __name__ == "__main__":
     print(f"CEO feedback: {ceo_feedback}")
     refined_code = api.refine_code(code, ceo_feedback)
     refined_code = CodeUtils().extract_code(refined_code)
-    print(f"Refined code: {refined_code}")
-    ceo_feedback = api.ceo_review(idea, refined_code)
-    print(f"CEO feedback: {ceo_feedback}")
-    refined_code = api.refine_code(refined_code, ceo_feedback)
-    refined_code = CodeUtils().extract_code(refined_code)
-    print(f"Refined code: {refined_code}")
-
     file = api.save_file(refined_code)
+    
     print(f"File saved as {file}")
     print(f"Refined code: {refined_code}")
