@@ -1,0 +1,82 @@
+from kivy.vector import Vector
+from kivy.core.window import Window
+from kivy.graphics import Color, Ellipse
+from kivy.uix.label import Label
+from random import randint
+import json  # For more secure high score management
+
+# Assuming all necessary Kivy imports and initial class setup
+
+class SpaceMinerGame(Widget):
+    def __init__(self, **kwargs):
+        super(SpaceMinerGame, self).__init__(**kwargs)
+        self.load_high_score()
+        # Initialize game elements like spacecraft, asteroids, etc.
+        self.add_widget(Label(text=f"Fuel: {self.fuel}", pos=(0, Window.height - 50), size_hint=(None, None), size=(100, 50)))
+        # Other UI elements initialization
+
+    def generate_asteroids(self):
+        num_asteroids = 50 + (self.level - 1) * 10
+        for _ in range(num_asteroids):
+            x = randint(0, Window.width)
+            y = randint(0, Window.height)
+            size = randint(20, 50)
+            velocity = Vector(randint(-2, 2), randint(-2, 2))
+            mineral_type = self.random_mineral_type()  # New feature: Different minerals
+            self.asteroids.append({'pos': (x, y), 'size': size, 'velocity': velocity, 'mineral': mineral_type})
+
+    def update(self, dt):
+        self.canvas.clear()
+        with self.canvas:
+            Color(1, 1, 1)
+            Ellipse(pos=self.spacecraft['pos'], size=self.spacecraft['size'])
+            for asteroid in self.asteroids:
+                Color(0.6, 0.6, 0.6)
+                new_pos = Vector(*asteroid['pos']) + asteroid['velocity']
+                asteroid['pos'] = new_pos.x, new_pos.y
+                Ellipse(pos=asteroid['pos'], size=(asteroid['size'], asteroid['size']))
+        self.check_collisions()
+
+    def check_collisions(self):
+        spacecraft_pos = Vector(*self.spacecraft['pos'])
+        spacecraft_size = self.spacecraft['size'][0]
+        for asteroid in self.asteroids:
+            asteroid_pos = Vector(*asteroid['pos'])
+            distance = spacecraft_pos.distance(asteroid_pos)
+            if distance < (spacecraft_size + asteroid['size']) / 2:
+                self.mine_asteroid(asteroid)
+
+    def mine_asteroid(self, asteroid):
+        mineral = asteroid['mineral']
+        if mineral in self.cargo:
+            self.cargo[mineral] += 1
+        else:
+            self.cargo[mineral] = 1
+        self.asteroids.remove(asteroid)
+
+    def on_touch_down(self, touch):
+        # Improved continuous movement towards touch
+        self.target_pos = touch.pos
+
+    def on_touch_move(self, touch):
+        # Allow spacecraft to follow the touch when dragged
+        self.target_pos = touch.pos
+
+    def save_high_score(self):
+        # Using JSON for more secure and structured storage
+        with open("high_score.json", "w") as file:
+            json.dump({"high_score": self.score}, file)
+
+    def load_high_score(self):
+        try:
+            with open("high_score.json", "r") as file:
+                self.high_score = json.load(file)["high_score"]
+        except (FileNotFoundError, json.JSONDecodeError):
+            self.high_score = 0
+
+    def random_mineral_type(self):
+        # Example function to randomize mineral types
+        minerals = ["Iron", "Gold", "Platinum"]
+        return minerals[randint(0, len(minerals) - 1)]
+
+    # Additional methods for upgrades, UI updates, etc.
