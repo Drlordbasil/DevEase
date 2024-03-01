@@ -1,6 +1,7 @@
 
 import re
 import subprocess
+from api_calls.openai_api import api_calls
 
 def find_pip_installed_packages():
     result = subprocess.run(["pip", "list"], capture_output=True, text=True)
@@ -35,8 +36,8 @@ class CodeCreator:
     def __init__(self):
         pass
 
-    def create_initial_code(self, api_calls,persona,idea):
-        
+    def create_initial_code(self,idea,ceo_feedback):
+        persona = "you a python coding expert. You generate a full script on the first try, removing all # inline comments or placeholders to make the script clear."
         try:
             system_message = persona
             user_message = f"""
@@ -52,6 +53,7 @@ class CodeCreator:
             # Description: [Brief description of the project]
             # Complete code here without any placeholders or comments
             '''
+            dont put placeholders such as 'pass' in your code. make sure to remove all comments and placeholders.
             """
             
             initial_code = api_calls(user_message, system_message)

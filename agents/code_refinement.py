@@ -64,6 +64,9 @@ class CodeRefiner:
             # Project Name: [Name of the project]
             # Complete refined code here without any placeholders, comments, or print statements
             '''
+            remove any and all 'pass' statements
+            remove all placeholders and comments
+            
             """
             refined_code = api_calls(user_message, system_message)
             refined_code = extract_code(refined_code)

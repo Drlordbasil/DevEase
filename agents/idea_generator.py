@@ -1,5 +1,7 @@
 
 import subprocess
+from api_calls.openai_api import api_calls
+
 
 def find_pip_installed_packages():
     result = subprocess.run(["pip", "list"], capture_output=True, text=True)
@@ -9,9 +11,9 @@ class IdeaGenerator:
     def __init__(self):
         pass
 
-    def generate_idea(self,api_calls,career):
+    def generate_idea(self):
         
-        
+        career  = api_calls("create a career persona for an AI developer specializing in Python. This career must be focused on idea generation of projects.", "you are a career specialist")
         try:
             system_message=career
             User_message = f"""
