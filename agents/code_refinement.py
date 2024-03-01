@@ -36,7 +36,7 @@ class CodeRefiner:
     def __init__(self):
         pass
     
-    def refine_code(self, code, feedback, update_callback):
+    def refine_code(self, code, feedback):
         try:
             system_message = """
             As a distinguished specialist in code refinement, your expertise is sought to optimize and enhance a given Python script. Your role is critical in elevating the code's efficiency, readability, and overall effectiveness, ensuring it adheres to the highest standards of Python programming.
@@ -72,8 +72,8 @@ class CodeRefiner:
             refined_code = extract_code(refined_code)
             
 
-            update_callback(f"Refined Code: {refined_code}")
+            
             return refined_code
         except Exception as e:
-            update_callback(f"Error refining code: {str(e)}")
+            
             return ""

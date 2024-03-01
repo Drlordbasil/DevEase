@@ -36,30 +36,29 @@ class CodeCreator:
     def __init__(self):
         pass
 
-    def create_initial_code(self,idea,ceo_feedback):
-        persona = "you a python coding expert. You generate a full script on the first try, removing all # inline comments or placeholders to make the script clear."
+    def create_initial_code(self, idea, ceo_feedback):
+        persona = "You are a python coding expert. You generate a full script on the first try, removing all # inline comments or placeholders to make the script clear."
         try:
             system_message = persona
             user_message = f"""
-            Given the project idea: '{idea}', please create an initial Python script that embodies this concept. The script should include the following elements:
+            Given the project idea: '{idea}', and the CEO feedback: '{ceo_feedback}', please create an initial Python script that embodies this concept. The script should include the following elements:
 
             1. Necessary imports: Include any required libraries and modules.
             2. Classes and functions: Define the classes and functions needed to implement the project's functionality.
             3. Main logic: Implement the main logic of the script, ensuring that it is fully functional and adheres to best practices.
 
             Please format your response using markdown as follows:
-            '''python
+            ```python
             # Project Name: [Name of the project]
             # Description: [Brief description of the project]
             # Complete code here without any placeholders or comments
-            '''
-            dont put placeholders such as 'pass' in your code. make sure to remove all comments and placeholders.
+            ```
+            Don't put placeholders such as 'pass' in your code. Make sure to remove all comments and placeholders.
             """
-            
+
             initial_code = api_calls(user_message, system_message)
             initial_code = extract_code(initial_code)
 
             return initial_code
         except Exception as e:
-            
             return ""

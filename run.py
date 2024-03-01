@@ -166,13 +166,13 @@ class Application:
         ceo_message = self.current_ceo_message if self.current_ceo_message else ""
         combined_feedback = f"{feedback} {ceo_message}".strip()
         self.update_related_gui_elements()
-        refinement_thread = threading.Thread(target=self.code_refiner.refine_code, args=(self.current_code, combined_feedback, self.log_message))
+        refinement_thread = threading.Thread(target=self.code_refiner.refine_code, args=(self.current_code, combined_feedback))
         refinement_thread.start()
         self.update_related_gui_elements()
         refinement_thread.join()
         ceo_feedback = self.CEO.review_employee("CodeRefiner", self.current_feedback, update_callback=self.log_message)
         self.current_ceo_message = ceo_feedback if ceo_feedback else ""
-        
+
 
 
         self.update_related_gui_elements()
@@ -192,7 +192,7 @@ class Application:
         with open(file, "w") as file:
             file.write(self.current_code)
         
-        messagebox.showinfo("Info", f"Final code saved as {file}")
+        messagebox.showinfo("Info", f"Final code saved")
 
     def generate_feedback(self):
         if not self.current_code.strip():
