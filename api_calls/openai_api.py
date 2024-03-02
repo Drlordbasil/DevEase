@@ -33,15 +33,12 @@ class OpenAIAPI:
         Returns:
             list: A list of relevant history entries.
         """
-        # Calculate similarity scores for each history entry
         similarity_scores = [
             (entry, difflib.SequenceMatcher(None, user_message, entry['user_message']).ratio())
             for entry in self.history
         ]
-        # Filter out entries with a similarity score above a certain threshold (e.g., 0.5)
         relevant_entries = [entry for entry, score in similarity_scores if score > 0.5]
-        # Limit the number of entries to avoid overwhelming the API
-        return relevant_entries[-5:]  # Return the 5 most recent relevant entries
+        return relevant_entries[-5:]
 
     def api_calls(self, user_message, sys_message):
         if not isinstance(user_message, str) or not isinstance(sys_message, str):
@@ -52,10 +49,10 @@ class OpenAIAPI:
             {"role": "system", "content": sys_message},
             {"role": "user", "content": user_message}
         ] + [
-            {"role": "system", "content": entry['sys_message'], "timestamp": entry['timestamp']}
+            {"role": "system", "content": entry['sys_message']}
             for entry in relevant_history
         ] + [
-            {"role": "user", "content": entry['user_message'], "timestamp": entry['timestamp']}
+            {"role": "user", "content": entry['user_message']}
             for entry in relevant_history
         ]
 
