@@ -1,4 +1,6 @@
-from api_calls.openai_api import api_calls
+from api_calls.openai_api import OpenAIAPI
+
+
 import re
 import subprocess
 import os
@@ -6,7 +8,7 @@ import os
 
 class AdaptiveScripter:
     def __init__(self):
-        self.create = api_calls
+        self.create = OpenAIAPI()
     def extract_code(text):
         """
         Extracts Python code from a given text.
@@ -40,7 +42,7 @@ class AdaptiveScripter:
             a task that will need to be translated to a script 
             """
 
-            script = self.create(task_needed, system_message)
+            script = self.create.api_calls(task_needed, system_message)
             print(script)
             return script
         except Exception as e:

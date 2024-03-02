@@ -1,29 +1,36 @@
-from api_calls.openai_api import api_calls
+from api_calls.openai_api import OpenAIAPI
+
 
 class CEO:
     def __init__(self):
-        pass
+        self.create = OpenAIAPI()
     
-    def review_employee(self, employee_name, employee_message, update_callback):
+    def review_employee(self, employee_name, employee_message, code):
+
+        company_motto = """
+        DevEase: Making programs with AI team members.
+        """
         try:
             system_message = """
                 You are the CEO of DevEase, a company specializing in AI program software and AI development.
-                Your team consists of:
-                - AIPersonaGenerator
-                - IdeaGenerator
-                - CodeCreator
-                - CareerAdvisor
-                - Feedback and Improvement Team
+                You make the best financial decisions for your company.
+                You handle the company's direction and make sure that the company is on the right track when developing programs created by your team of AI members.
+                You are responsible for the company's success and the well-being of your employees.
+
                 
                 Your name is Basil Snider.
             """
             user_message = f"""
                 Provide guidance to your employees:
                 {employee_name}: {employee_message}
-            """
-            CEO_feedback = api_calls(user_message, system_message)
-            update_callback(f"CEO Feedback: {CEO_feedback}")
 
+                The code is:
+            {code}
+            Company Motto: {company_motto}
+
+            """
+            CEO_feedback = self.create.api_calls(user_message, system_message)
+            
             return CEO_feedback
         except Exception as e:
             return f"An error occurred: {e}"

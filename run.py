@@ -25,7 +25,7 @@ class Application:
         self.master = master
         master.title("DevEase: Streamlining Development with Ease Utilizing a personal AI army")
         
-        # Background image
+       
         self.background_image = PhotoImage(file="assets/background.png")
         self.background_label = Label(master, image=self.background_image)
         self.background_label.place(x=0, y=0, relwidth=1, relheight=1)
@@ -105,7 +105,7 @@ class Application:
 
     def _generate_idea_and_code(self):
         idea = self.idea_gen.generate_idea() 
-        ceo_feedback = self.CEO.review_employee("IdeaGenerator", idea, update_callback=self.log_message)
+        ceo_feedback = self.CEO.review_employee("IdeaGenerator", idea, self.current_code)
 
         if idea:
             self.current_idea = idea  
@@ -113,7 +113,7 @@ class Application:
             self.log_message(f"New Idea Generated: {idea}")
             
             if ceo_feedback:
-                self.current_ceo_message = ceo_feedback  # Update the current CEO message
+                self.current_ceo_message = ceo_feedback  
                 self.log_message(f"CEO Feedback: {ceo_feedback}")
             
             self.update_text_area(self.idea_text, self.current_idea, "Current Idea")
@@ -123,7 +123,7 @@ class Application:
             self.update_text_area(self.code_text, self.current_code, "Current Code")
             self.current_feedback = self.feedback_gen.generate_feedback(self.current_code)
             self.update_text_area(self.feedback_text, self.current_feedback, "Current Feedback")
-            self.current_ceo_message = self.CEO.review_employee("CodeCreator", self.current_code, update_callback=self.log_message)
+            self.current_ceo_message = self.CEO.review_employee("CodeCreator", self.current_code, self.current_code)
             self.update_text_area(self.ceo_message, self.current_ceo_message, "CEO Message")
             self.current_code_output = self.execute_code(self.current_code)
             self.update_related_gui_elements()
@@ -134,49 +134,40 @@ class Application:
 
     def update_related_gui_elements(self):
         """Updates related GUI elements to reflect the current state."""
-    
-        self.update_text_area(self.feedback_text, self.current_feedback, "Current Feedback")
-        self.update_text_area(self.code_output_text, self.current_code_output, "Code execution result")
-        self.update_text_area(self.ceo_message, self.current_ceo_message, "CEO Message")
-        self.update_text_area(self.idea_text, self.current_idea, "Current Idea")
-        self.update_text_area(self.code_text, self.current_code, "Current Code")
+        self.update_gui_elements()
 
-
-
-
-
-        
     def refine_code(self):
         if not self.current_code.strip():
             messagebox.showinfo("Info", "No code available to refine.")
             return
 
-        
-        self.update_related_gui_elements()
+        self.update_gui_elements()
         threading.Thread(target=self._refine_and_execute_code).start()
-        self.update_related_gui_elements()
-
-
+        self.update_gui_elements()
 
     def _refine_and_execute_code(self):
         """Handles the code refinement and waits for completion before execution."""
-        
         feedback = self.feedback_gen.generate_feedback(self.current_code)
         self.current_feedback = feedback if feedback else ""
-        self.update_related_gui_elements()
+        self.update_gui_elements()
         ceo_message = self.current_ceo_message if self.current_ceo_message else ""
         combined_feedback = f"{feedback} {ceo_message}".strip()
-        self.update_related_gui_elements()
+        self.update_gui_elements()
         refinement_thread = threading.Thread(target=self.code_refiner.refine_code, args=(self.current_code, combined_feedback))
         refinement_thread.start()
-        self.update_related_gui_elements()
+        self.update_gui_elements()
         refinement_thread.join()
-        ceo_feedback = self.CEO.review_employee("CodeRefiner", self.current_feedback, update_callback=self.log_message)
+        ceo_feedback = self.CEO.review_employee("CodeRefiner", self.current_code, self.current_code)
         self.current_ceo_message = ceo_feedback if ceo_feedback else ""
+        self.update_gui_elements()
 
-
-
-        self.update_related_gui_elements()
+    def update_gui_elements(self):
+        """Updates the GUI elements with the current state."""
+        self.update_text_area(self.feedback_text, self.current_feedback, "Current Feedback")
+        self.update_text_area(self.code_output_text, self.current_code_output, "Code execution result")
+        self.update_text_area(self.ceo_message, self.current_ceo_message, "CEO Message")
+        self.update_text_area(self.idea_text, self.current_idea, "Current Idea")
+        self.update_text_area(self.code_text, self.current_code, "Current Code")
 
         
         
@@ -197,7 +188,7 @@ class Application:
         
         threading.Thread(target=self.generate_feedback).start()
         self.update_text_area(self.feedback_text, self.current_feedback)
-        self.current_ceo_message = self.CEO.review_employee("CodeRefiner", self.current_feedback, update_callback=self.log_message)
+        self.current_ceo_message = self.CEO.review_employee("CodeRefiner", self.current_feedback, self.current_code)
         self.update_text_area(self.ceo_message, self.current_ceo_message)
         self.update_related_gui_elements()
         
@@ -238,7 +229,7 @@ class Application:
         self.master.quit()
         self.master.destroy()
     def update_text_area(self, text_widget, content, content_description=None):
-        text_widget.delete('1.0', END)  # Clear existing content
+        text_widget.delete('1.0', END)  
         if content:
             text_widget.insert(END, content)  
         if content_description:

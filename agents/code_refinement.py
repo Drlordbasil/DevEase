@@ -1,5 +1,6 @@
 
-from api_calls.openai_api import api_calls
+from api_calls.openai_api import OpenAIAPI
+
 import subprocess
 import re
 def find_pip_installed_packages():
@@ -34,7 +35,7 @@ libraries = find_pip_installed_packages()
 
 class CodeRefiner:
     def __init__(self):
-        pass
+        self.create = OpenAIAPI()
     
     def refine_code(self, code, feedback):
         try:
@@ -68,7 +69,7 @@ class CodeRefiner:
             remove all placeholders and comments
             
             """
-            refined_code = api_calls(user_message, system_message)
+            refined_code = self.create.api_calls(user_message, system_message)
             refined_code = extract_code(refined_code)
             
 

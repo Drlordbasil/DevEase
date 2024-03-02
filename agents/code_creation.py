@@ -1,7 +1,8 @@
 
 import re
 import subprocess
-from api_calls.openai_api import api_calls
+from api_calls.openai_api import OpenAIAPI
+
 
 def find_pip_installed_packages():
     result = subprocess.run(["pip", "list"], capture_output=True, text=True)
@@ -17,24 +18,15 @@ def extract_code(text):
     Returns:
         A string containing the extracted Python code.
     """
-
-    # Define the regular expression pattern for matching Python code blocks
     pattern = r"```python\n((?:.|\n)*?)```"
-
-    # Find all the Python code blocks in the text
     code_blocks = re.findall(pattern, text)
-
-    # Join the code blocks into a single string
     code = "\n".join(code_blocks)
-
-    # Remove the leading and trailing newlines
     code = code.strip()
-
     return code
 
 class CodeCreator:
     def __init__(self):
-        pass
+        self.create = OpenAIAPI()
 
     def create_initial_code(self, idea, ceo_feedback):
         persona = "You are a python coding expert. You generate a full script on the first try, removing all # inline comments or placeholders to make the script clear."
@@ -56,7 +48,7 @@ class CodeCreator:
             Don't put placeholders such as 'pass' in your code. Make sure to remove all comments and placeholders.
             """
 
-            initial_code = api_calls(user_message, system_message)
+            initial_code = self.create.api_calls(user_message, system_message)
             initial_code = extract_code(initial_code)
 
             return initial_code

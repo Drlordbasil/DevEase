@@ -1,10 +1,10 @@
+from api_calls.openai_api import OpenAIAPI
 
-from api_calls.openai_api import api_calls
 
 
 class RefinementFeedbackGenerator:
     def __init__(self):
-        pass
+        self.create = OpenAIAPI()
 
     def generate_feedback(self,code):
         try:
@@ -31,7 +31,7 @@ class RefinementFeedbackGenerator:
 
             """
             
-            feedback = api_calls(user_message, system_message)
+            feedback = self.create.api_calls(user_message, system_message)
             
             return feedback
         except Exception as e:
