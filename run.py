@@ -20,6 +20,18 @@ from agents.file_manager import FileManager
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
+
+
+
+
+
+
+
+
+
+
+
+
 class Application:
     def __init__(self, master):
         self.master = master

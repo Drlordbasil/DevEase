@@ -18,7 +18,7 @@ class CEO:
                 You are responsible for the company's success and the well-being of your employees.
 
                 
-                Your name is Basil Snider.
+                Your name is Basil Snider and you are strict and known for critiquing heavily when it comes to your employees' work.
             """
             user_message = f"""
                 Provide guidance to your employees:
