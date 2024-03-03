@@ -1,60 +1,79 @@
-import news_api
-from api_calls.openai_api import api_calls
-from agents.CEO_persona import CEO
-from agents.idea_generator import IdeaGenerator
-# Import other agents as needed
+import os
+import asyncio
+import subprocess
+import json
+from api_calls.openai_api import OpenAIAPI
 
-class TaskGenerator:
-    def __init__(self, ceo_agent, idea_agent, news_agent, tech_trends_agent=None, customer_feedback_agent=None, competitive_analysis_agent=None):
-        self.ceo_agent = ceo_agent
-        self.idea_agent = idea_agent
-        self.news_api = news_agent
-        self.tech_trends_agent = tech_trends_agent
-        self.customer_feedback_agent = customer_feedback_agent
-        self.competitive_analysis_agent = competitive_analysis_agent
+class VirtualTeamProject:
+    def __init__(self, config_path='./config.json', workspace_dir='./workspace'):
+        self.api = OpenAIAPI()
+        self.config_path = config_path
+        self.workspace_dir = workspace_dir
+        self.tasks_config = self.load_tasks_config()
 
-    def generate_task(self):
-        idea = self.idea_agent.generate_idea(api_calls, "Software Development")  # Assuming 'career' is specified here for simplicity
-        news_insight = self.news_api.get_news()
+    async def async_init(self):
+        self.project_name = await self.generate_dynamic_name("project")
+        self.project_path = os.path.join(self.workspace_dir, self.sanitize_name(self.project_name))
+        await self.create_directory(self.workspace_dir)
+        await self.create_directory(self.project_path)
+        print(f"Project '{self.project_name}' initialized within workspace at '{self.project_path}'.")
+        self.initialize_git_repository()
 
-        task = self._create_task_based_on_insights(idea, news_insight['articles'][0]['title'])  # Simplified to use the title of the first article
+    def load_tasks_config(self):
+        with open(self.config_path, 'r') as file:
+            return json.load(file)
 
-        if self.tech_trends_agent:
-            # Assuming we're using the same news_api.get_news() for simplicity
-            tech_insight = self.news_api.get_news()
-            task = self._enhance_task_with_tech_insights(task, tech_insight['articles'][1]['title'])
+    async def generate_dynamic_name(self, entity_type):
+        prompt = self.tasks_config.get(entity_type, {}).get('prompt', "Generate a concise, unique name.")
+        loop = asyncio.get_event_loop()
+        dynamic_name = await loop.run_in_executor(None, self.api.api_calls, prompt, prompt)
+        return self.sanitize_name(dynamic_name.strip()) or f"Dynamic{entity_type.capitalize()}"
+    async def perform_and_save_task(self, task_name, extension):
+        task_config = self.tasks_config.get(task_name, {})
+        # Enhanced prompting mechanism for more actionable outputs
+        prompt = f"Generate {extension} code to {task_config.get('description', 'achieve the task')}. Focus on: {task_config.get('prompt')}"
+        loop = asyncio.get_event_loop()
+        output = await loop.run_in_executor(None, self.api.api_calls, prompt, prompt)
+        filename = self.sanitize_name(await self.generate_dynamic_name(task_name))
+        filepath = os.path.join(self.project_path, f"{filename}.{extension}")
+        await self.save_output(filepath, output)
+        print(f"'{task_name}' task completed and saved as '{filepath}'.")
 
-        if self.customer_feedback_agent:
-            # Similarly, using news_api.get_news() to simulate customer feedback for simplicity
-            customer_feedback = self.news_api.get_news()
-            task = self._enhance_task_with_customer_feedback(task, customer_feedback['articles'][2]['title'])
 
-        self.report_to_ceo(task)
-        return task
+    def sanitize_name(self, name):
+        invalid_chars = '<>:"/\\|?*'
+        for char in invalid_chars:
+            name = name.replace(char, '')
+        return name[:40].strip()
 
-    def _create_task_based_on_insights(self, idea, news_insight):
-        task_description = f"Develop a solution for: '{idea}', considering recent developments: '{news_insight}'."
-        return {"task": "New Development Task", "details": task_description}
+    async def create_directory(self, path):
+        if not os.path.exists(path):
+            os.makedirs(path)
 
-    def _enhance_task_with_tech_insights(self, task, tech_insight):
-        enhanced_details = task['details'] + f" Incorporate latest technology trends: '{tech_insight}'."
-        return {"task": task['task'], "details": enhanced_details}
+    def initialize_git_repository(self):
+        subprocess.run(["git", "init"], cwd=self.project_path)
+        subprocess.run(["git", "add", "."], cwd=self.project_path)
+        subprocess.run(["git", "commit", "-m", "Initial commit"], cwd=self.project_path)
 
-    def _enhance_task_with_customer_feedback(self, task, customer_feedback):
-        enhanced_details = task['details'] + f" Address customer feedback: '{customer_feedback}'."
-        return {"task": task['task'], "details": enhanced_details}
+    async def run_project_workflow(self):
+        for task in self.tasks_config['tasks']:
+            await self.perform_and_save_task(task['name'], task['extension'])
+            self.commit_task(task['name'])
 
-    def report_to_ceo(self, task):
-        employee_name = "TaskGenerator"
-        employee_message = task['details']
-        self.ceo_agent.review_employee(employee_name, employee_message, self.update_callback)
+    async def save_output(self, filepath, output):
+        with open(filepath, 'w') as file:
+            file.write(output)
 
-    def update_callback(self, message):
-        print(message)
+    def commit_task(self, task_name):
+        subprocess.run(["git", "add", "."], cwd=self.project_path)
+        subprocess.run(["git", "commit", "-m", f"Complete {task_name}"], cwd=self.project_path)
 
-# Example usage
+async def main():
+    config_path = './config.json'
+    workspace_dir = './workspace'
+    virtual_team = VirtualTeamProject(config_path=config_path, workspace_dir=workspace_dir)
+    await virtual_team.async_init()
+    await virtual_team.run_project_workflow()
+
 if __name__ == "__main__":
-    ceo_agent = CEO()
-    idea_agent = IdeaGenerator(api_calls, "Software Development")  # This assumes the IdeaGenerator is initialized with necessary arguments
-    task_generator = TaskGenerator(ceo_agent, idea_agent, news_api)
-    task_generator.generate_task()
+    asyncio.run(main())

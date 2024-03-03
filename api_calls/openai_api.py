@@ -2,9 +2,10 @@ from openai import OpenAI
 import json
 import time
 import difflib
-
+gpt3 = "gpt-3.5-turbo-16k"
+gpt4 = "gpt-4-0125-preview"
 class OpenAIAPI:
-    def __init__(self, model="gpt-4-0125-preview", history_limit=100):
+    def __init__(self, model=gpt3, history_limit=100):
         self.openai = OpenAI()
         self.model = model
         self.history = []  # Local cache to store history

@@ -1,0 +1,23 @@
+To generate relevant and actionable output for the 'define project' task, follow these instructions:
+
+1. Identify the purpose: Clearly define the purpose of the project. What problem or opportunity does it address? What are the goals and objectives?
+
+2. Define scope: Determine the boundaries and limitations of the project. What is included and what is excluded? Consider the deliverables, timeline, and resources available.
+
+3. Identify stakeholders: Identify all individuals or groups who have an interest or will be affected by the project. This includes project sponsors, team members, end-users, and any other relevant parties.
+
+4. Conduct a feasibility analysis: Assess the feasibility of the project by considering factors such as technical, economic, operational, and legal feasibility. Determine if the project is viable and if it aligns with the organization's goals.
+
+5. Create a project charter: Develop a project charter that outlines the project's purpose, scope, objectives, stakeholders, and high-level timeline. This document will serve as a reference point throughout the project.
+
+6. Define project deliverables: Clearly define the specific outputs or outcomes that the project will produce. These should be measurable and aligned with the project's objectives.
+
+7. Develop a project plan: Create a detailed project plan that includes tasks, timelines, dependencies, and resource allocation. This plan will serve as a roadmap for executing the project.
+
+8. Identify risks and mitigation strategies: Identify potential risks and uncertainties that could impact the project's success. Develop strategies to mitigate these risks and ensure project success.
+
+9. Determine project success criteria: Define the criteria that will be used to measure the success of the project. This could include factors such as meeting deadlines, staying within budget, achieving desired outcomes, or customer satisfaction.
+
+10. Obtain approval: Present the project definition to relevant stakeholders for approval. This ensures that everyone is aligned and committed to the project's objectives and deliverables.
+
+By following these instructions, you will be able to generate relevant and actionable output for the 'define project' task.

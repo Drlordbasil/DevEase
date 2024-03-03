@@ -1,0 +1,45 @@
+{
+    "tasks": [
+      {
+        "name": "define project",
+        "extension": "md",
+        "prompt": "Generate a comprehensive project definition including goals, scope, and technologies involved."
+      },
+      {
+        "name": "generate idea",
+        "extension": "txt",
+        "prompt": "Provide innovative project ideas within the tech domain, focusing on current trends."
+      },
+      {
+        "name": "create code",
+        "extension": "py",
+        "prompt": "Generate starter code snippets for a given project idea, ensuring best practices are followed."
+      },
+      {
+        "name": "test code",
+        "extension": "py",
+        "prompt": "Outline a testing strategy for the project, including unit tests and integration tests."
+      },
+      {
+        "name": "debug code",
+        "extension": "py",
+        "prompt": "Identify potential bugs in the given code snippets and provide fixes."
+      },
+      {
+        "name": "refine code",
+        "extension": "py",
+        "prompt": "Refine and optimize the code, enhancing readability and performance."
+      },
+      {
+        "name": "document code",
+        "extension": "md",
+        "prompt": "Extract docstrings from the code and compile them into a Markdown document."
+      },
+      {
+        "name": "finalize project",
+        "extension": "md",
+        "prompt": "Summarize the project completion, including final testing, documentation, and deployment steps."
+      }
+    ]
+  }
+  
