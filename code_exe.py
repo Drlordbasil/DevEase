@@ -1,65 +1,86 @@
 import subprocess
-import ast
+import logging
+import os
+from radon.complexity import cc_visit
+from radon.metrics import mi_visit, mi_rank
+from flake8.api import legacy as flake8
 
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 class CodeExecutor:
-    """
-    A class that executes code, finds installed packages, reads scripts, and checks directory contents.
-    """
+    def __init__(self, workspace="workspace"):
+        self.workspace = workspace
+        self.code = ""
+        os.makedirs(self.workspace, exist_ok=True)  # Ensure workspace directory exists
 
-    def execute_code(self, code):
+    def execute_python_code(self, code):
         """
-        Executes the given code and provides feedback.
+        Executes Python code and returns output. This is a placeholder for execution logic.
+        """
+        # Execution logic here...
+        return "Execution results..."
 
-        Args:
-            code (str): The code to be executed.
-
-        Returns:
-            str: The feedback generated during code execution.
+    def analyze_code(self, code):
+        """
+        Analyzes Python code for complexity, maintainability, and style guide adherence.
         """
         try:
-            ast.parse(code)  # Validate the code syntax
-            with open("Scripts/temp_code.py", "w") as file:
-                file.write(code)
-            result = subprocess.run(["python", "Scripts/temp_code.py"], capture_output=True, text=True, timeout=15)
-            code_output = result.stdout
-            return code_output
-        except subprocess.TimeoutExpired:
-            return "The code took too long to execute."
-        except SyntaxError as e:
-            return f"SyntaxError: {str(e)}"
+            # Complexity analysis
+            complexity = cc_visit(code)
+            maintainability_index = mi_visit(code, True)
+            rank = mi_rank(maintainability_index)
+
+            # Linting
+            flake8_style_guide = flake8.get_style_guide(ignore=['E501'])
+            report = flake8_style_guide.check_files([code])
+
+            analysis_results = {
+                'complexity': complexity,
+                'maintainability_index': maintainability_index,
+                'maintainability_rank': rank,
+                'linting_errors': report.get_statistics('E'),
+                'linting_warnings': report.get_statistics('W'),
+            }
+            return analysis_results
         except Exception as e:
-            return str(e)
+            logging.error(f"Code analysis error: {e}")
+            return f"An error occurred during code analysis:\n{str(e)}"
 
-    def find_pip_installed_packages(self):
+    def read_file(self, file_path):
         """
-        Finds the list of installed packages using pip.
-
-        Returns:
-            str: The list of installed packages.
+        Reads a file from the workspace directory.
         """
-        result = subprocess.run(["pip", "list"], capture_output=True, text=True)
-        return result.stdout
+        full_path = os.path.join(self.workspace, file_path)
+        try:
+            with open(full_path, "r") as file:
+                self.code = file.read()
+            return self.code
+        except FileNotFoundError:
+            return "File not found."
+        except Exception as e:
+            return f"An error occurred: {str(e)}"
 
-    def read_current_scripts(self, filename):
+    def write_file(self, file_path, code):
         """
-        Reads the content of a script file.
-
-        Args:
-            filename (str): The name of the script file.
-
-        Returns:
-            str: The content of the script file.
+        Writes a file to the workspace directory.
         """
-        with open(filename, "r") as file:
-            return file.read()
+        full_path = os.path.join(self.workspace, file_path)
+        try:
+            with open(full_path, "w") as file:
+                file.write(code)
+            return f"File written successfully: {full_path}"
+        except Exception as e:
+            return f"An error occurred: {str(e)}"
 
-    def check_directory_contents(self):
+    def extract_marked_down_python_code(self, markdown):
         """
-        Checks the contents of the current directory.
+        Extracts Python code blocks from Markdown text.
+        """
+        try:
+            self.code = markdown.split("```python")[1].split("```")[0].strip()
+            return self.code
+        except IndexError as e:
+            logging.error("Python code block not found in Markdown")
+            return "Python code block not found in Markdown."
 
-        Returns:
-            str: The list of directory contents.
-        """
-        result = subprocess.run(["ls"], capture_output=True, text=True)
-        return result.stdout
+        

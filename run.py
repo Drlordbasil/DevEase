@@ -105,8 +105,7 @@ class Application:
         self.save_final_code_button.pack(side="left", padx=5, pady=5)
         self.auto_generate_button.pack(padx=5, pady=5)
 
-    def on_adaptive_test_button_click(self):
-        threading.Thread(target=AdaptiveScripter().test).start()
+
 
     def log_message(self, message):
         self.log.insert(END, message + "\n")
@@ -186,7 +185,7 @@ class Application:
     def save_final_code(self):
         self.update_text_area(self.code_text, self.current_code)
         self.update_related_gui_elements()
-        
+        self.current_code_output = self.code_exec.analyze_code(self.current_code)
 
         file_name = self.file_manager.save_mod_file(self.current_code)
         
@@ -201,6 +200,7 @@ class Application:
         threading.Thread(target=self.generate_feedback).start()
         self.update_text_area(self.feedback_text, self.current_feedback)
         self.current_ceo_message = self.CEO.review_employee("CodeRefiner", self.current_feedback, self.current_code)
+        self.current_code_output = self.code_exec.analyze_code(self.current_code)
         self.update_text_area(self.ceo_message, self.current_ceo_message)
         self.update_related_gui_elements()
         
@@ -246,24 +246,7 @@ class Application:
             text_widget.insert(END, content)  
         if content_description:
             self.log_message(f"Updated '{content_description}': {content}")
-    def execute_code(self,code):
-        """
-        Executes the provided Python code and returns the output.
 
-        Args:
-            code: The Python code to execute.
-
-        Returns:
-            The output of the code execution.
-        """
-        try:
-            result = subprocess.run(["python", "-c", code], capture_output=True, text=True, timeout=10)
-            self.log_message(f"Code execution result: {result.stdout}")
-            return result.stdout
-        except subprocess.TimeoutExpired:
-            return "Code execution timed out."
-        except Exception as e:
-            return str(e)
 
 if __name__ == "__main__":
     root = Tk()
