@@ -17,7 +17,7 @@ class FileManager:
             return f"An error occurred: {e}"
 
     def name_file(self, code):
-        name = self.openai_api.api_calls(f"The code is:\n{code}\nCreate a filename with extension as follows only as your response: <filename>.<ext>. ONLY RESPOND WITH A SINGULAR FILENAME!", "You simply create file names that will be saved.")
+        name = self.openai_api.api_calls(f"The code is:\n{code}\nCreate a filename with extension as follows only as your response: <filename>.<ext>. ONLY RESPOND WITH A SINGULAR FILENAME!", "You simply create file names that will be saved. If python code is within content, make it .py. if html content, name .html, ect.")
         # Removed the regex validation to trust AI's output directly
         return name.strip()  # Ensure to strip any leading/trailing whitespace
     
