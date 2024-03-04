@@ -134,9 +134,10 @@ class Application:
             self.update_text_area(self.code_text, self.current_code, "Current Code")
             self.current_feedback = self.feedback_gen.generate_feedback(self.current_code)
             self.update_text_area(self.feedback_text, self.current_feedback, "Current Feedback")
-            self.current_ceo_message = self.CEO.review_employee("CodeCreator", self.current_code, self.current_code)
+            self.current_code_output = self.code_exec.analyze_code(self.current_code)
+            self.current_ceo_message = self.CEO.review_employee("CodeCreator: in-charge of flawless start scripts. ", self.current_code, f"current output:{self.current_code_output}")
             self.update_text_area(self.ceo_message, self.current_ceo_message, "CEO Message")
-            self.current_code_output = self.execute_code(self.current_code)
+            self.current_code_output = self.code_exec.analyze_code(self.current_code)
             self.update_related_gui_elements()
             
 
@@ -151,27 +152,24 @@ class Application:
         if not self.current_code.strip():
             messagebox.showinfo("Info", "No code available to refine.")
             return
-
-        self.update_gui_elements()
-        threading.Thread(target=self._refine_and_execute_code).start()
-        self.update_gui_elements()
+        threading.Thread(target=self._refine_and_execute_code, daemon=True).start()
 
     def _refine_and_execute_code(self):
-        """Handles the code refinement and waits for completion before execution."""
+        """Refines the current code and executes it, updating GUI elements accordingly."""
         feedback = self.feedback_gen.generate_feedback(self.current_code)
-        self.current_feedback = feedback if feedback else ""
-        self.update_gui_elements()
-        ceo_message = self.current_ceo_message if self.current_ceo_message else ""
-        combined_feedback = f"{feedback} {ceo_message}".strip()
-        self.update_gui_elements()
-        refinement_thread = threading.Thread(target=self.code_refiner.refine_code, args=(self.current_code, combined_feedback))
-        refinement_thread.start()
-        self.update_gui_elements()
-        refinement_thread.join()
-        ceo_feedback = self.CEO.review_employee("CodeRefiner", self.current_code, self.current_code)
-        self.current_ceo_message = ceo_feedback if ceo_feedback else ""
-        self.update_gui_elements()
+        self.current_feedback = feedback or ""
+        self.current_code_output = self.code_exec.analyze_code(self.current_code)
+        ceo_message = self.current_ceo_message or ""
+        combined_feedback = f"{feedback} {ceo_message}+here is the outputs of analysis:{self.current_code_output}".strip()
 
+        # Assuming refine_code now returns the refined code
+        refined_code = self.code_refiner.refine_code(self.current_code, combined_feedback)
+        if refined_code:
+            self.current_code = refined_code  # Update the current code with the refined version
+        
+        ceo_feedback = self.CEO.review_employee("CodeRefiner", self.current_code, f"current output:{self.current_code_output}")
+        self.current_ceo_message = ceo_feedback or ""
+        self.update_gui_elements()
     def update_gui_elements(self):
         """Updates the GUI elements with the current state."""
         self.update_text_area(self.feedback_text, self.current_feedback, "Current Feedback")
@@ -199,7 +197,7 @@ class Application:
         
         threading.Thread(target=self.generate_feedback).start()
         self.update_text_area(self.feedback_text, self.current_feedback)
-        self.current_ceo_message = self.CEO.review_employee("CodeRefiner", self.current_feedback, self.current_code)
+        self.current_ceo_message = self.CEO.review_employee("CodeRefiner", self.current_feedback, self.current_code+f"current output:{self.current_code_output}")
         self.current_code_output = self.code_exec.analyze_code(self.current_code)
         self.update_text_area(self.ceo_message, self.current_ceo_message)
         self.update_related_gui_elements()

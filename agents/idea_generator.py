@@ -23,6 +23,10 @@ class IdeaGenerator:
             Be rooted in Python and AI technologies, showcasing how these tools can be utilized for significant market impact.
             Have a "WOW" factor, with the potential to shock the world and contribute positively to society.
             Demonstrate practical AI applications for creating or enhancing value-added services or products, aiming for rapid monetization.
+            dont overthink it, just be creative and think of something that would be cool to see in the world that is plausible for an AI to create.
+            the idea should be something that is not already in the market, and it should be something that is not too far fetched.
+            The idea must be able to be done within 3 responses from the AI.
+            
             
             """
 
