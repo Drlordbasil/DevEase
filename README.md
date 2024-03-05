@@ -5,8 +5,9 @@
 DevEase is a cutting-edge GUI-based tool designed to revolutionize the programming process, making development more accessible, efficient, and enjoyable for developers of all skill levels. By seamlessly bridging the gap between idea and implementation, DevEase empowers users to transform their creative concepts into functional software with unprecedented ease.
 
 [DevEase Interface]
-as of 2/29/24:
-![image](https://github.com/Drlordbasil/DevEase/assets/126736516/9acfebc4-2c5c-4ec5-9d64-e39434b86cb8)
+as of 3/5/24:
+![image](https://github.com/Drlordbasil/DevEase/assets/126736516/45481bed-c560-43d7-8a2f-6d615a2546ab)
+
 
 
 
