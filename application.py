@@ -24,7 +24,7 @@ class Application:
         self.setup_agents()
         self.setup_text_areas()
         self.setup_collaboration_manager()
-
+    
     def setup_background(self):
         self.background_image = PhotoImage(file="assets/background.png")
         self.background_label = Label(self.master, image=self.background_image)
@@ -47,6 +47,13 @@ class Application:
         self.refine_code_button.pack(side="left", padx=5, pady=5)
         self.save_final_code_button.pack(side="left", padx=5, pady=5)
         self.auto_generate_button.pack(side="left", padx=5, pady=5)
+
+        self.buttons = [
+            self.generate_idea_button,
+            self.refine_code_button,
+            self.save_final_code_button,
+            self.auto_generate_button
+        ]
 
     def setup_agents(self):
         self.file_manager = FileManager()
@@ -103,6 +110,7 @@ class Application:
         self.log.see(END)
 
     def generate_idea(self):
+        self.disable_buttons()
         threading.Thread(target=self._generate_idea_and_code).start()
 
     def _generate_idea_and_code(self):
@@ -136,6 +144,8 @@ class Application:
             self.update_related_gui_elements()
         else:
             self.log_message("No idea was generated.")
+        
+        self.enable_buttons()
 
     def update_related_gui_elements(self):
         self.update_gui_elements()
@@ -144,6 +154,7 @@ class Application:
         if not self.current_code.strip():
             messagebox.showinfo("Info", "No code available to refine.")
             return
+        self.disable_buttons()
         threading.Thread(target=self._refine_and_execute_code, daemon=True).start()
 
     def _refine_and_execute_code(self):
@@ -167,6 +178,7 @@ class Application:
         ceo_feedback = self.collaboration_manager.get_ceo_feedback("CodeRefiner", self.current_code, f"Current Output: {self.current_code_output}\nScript Output: {script_output}\n feedback: {combined_feedback} \n remember you are directly chatting with AI so be careful with your words.")
         self.current_ceo_message = ceo_feedback or ""
         self.update_gui_elements()
+        self.enable_buttons()
 
     def update_gui_elements(self):
         self.update_text_area(self.feedback_text, self.current_feedback, "Current Feedback")
@@ -176,6 +188,7 @@ class Application:
         self.update_text_area(self.code_text, self.current_code, "Current Code")
 
     def save_final_code(self):
+        self.disable_buttons()
         self.update_text_area(self.code_text, self.current_code)
         self.update_related_gui_elements()
         self.current_code_output = self.collaboration_manager.analyze_code(self.current_code)
@@ -183,6 +196,7 @@ class Application:
         file_name = self.collaboration_manager.save_code(self.current_code)
         self.file_name = file_name
         messagebox.showinfo("Info", f"Final code saved as {file_name}")
+        self.enable_buttons()
 
     def generate_feedback(self):
         if not self.current_code.strip():
@@ -190,6 +204,7 @@ class Application:
             return
         self.update_related_gui_elements()
         
+        self.disable_buttons()
         threading.Thread(target=self.generate_feedback).start()
         self.update_text_area(self.feedback_text, self.current_feedback)
         self.current_ceo_message = self.collaboration_manager.get_ceo_feedback("CodeRefiner", f"feedback agent response about the code:{self.current_feedback}",
@@ -197,8 +212,10 @@ class Application:
         self.current_code_output = self.collaboration_manager.analyze_code(self.current_code)
         self.update_text_area(self.ceo_message, self.current_ceo_message)
         self.update_related_gui_elements()
+        self.enable_buttons()
 
     def auto_generate(self):
+        self.disable_buttons()
         self.update_related_gui_elements()
 
         t1 = threading.Thread(target=self._generate_idea_and_code)
@@ -221,10 +238,11 @@ class Application:
         self.update_related_gui_elements()
 
         self.log_message("Auto generation complete.")
+        self.enable_buttons()
 
     def on_auto_generate_button_click(self):
+        self.disable_buttons()
         threading.Thread(target=self.auto_generate).start()
-        self.update_related_gui_elements()
 
     def on_exit_button_click(self):
         self.master.quit()
@@ -236,6 +254,14 @@ class Application:
             text_widget.insert(END, content)  
         if content_description:
             self.log_message(f"Updated '{content_description}': {content}")
+
+    def disable_buttons(self):
+        for button in self.buttons:
+            button.config(state="disabled")
+
+    def enable_buttons(self):
+        for button in self.buttons:
+            button.config(state="normal")
 
 
 class CollaborationManager:
