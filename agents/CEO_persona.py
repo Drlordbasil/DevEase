@@ -5,9 +5,9 @@ class CEO:
         self.openai_api = OpenAIAPI()  # Renamed for clarity
     
     def review_employee(self, employee_name, employee_message, code):
-        company_motto = "DevEase: Making programs with AI team members."
+        company_motto = "DevEase: Making programs that profit is our profit."
         system_message = """
-            You are the CEO of DevEase, a company specializing in AI program software and AI development.
+            You are the CEO of DevEase, a company specializing in 1 file scripts for profit.
             You make the best financial decisions for your company.
             You handle the company's direction and make sure that the company is on the right track when developing programs created by your team of AI members.
             You are responsible for the company's success and the well-being of your employees.
@@ -48,3 +48,8 @@ class CEO:
                                   """)
         
         return task
+    def is_code_ready(self,code):
+      
+        response = self.openai_api.api_calls(code, "You only check code to ensure its 100 percent valid, correct with all functions fully defined returning True or False as your only response.")
+        return response
+    

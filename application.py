@@ -11,34 +11,52 @@ from agents.file_manager import FileManager
 from agents.CEO_persona import CEO
 from agents.web_research_agent import WebResearch
 
+
+
 class Application:
     def __init__(self, master):
         self.master = master
         master.title("DevEase: Streamlining Development with Ease Utilizing a Personal AI Army")
         
-        self.background_image = PhotoImage(file="assets/background.png")
-        self.background_label = Label(master, image=self.background_image)
-        self.background_label.place(x=0, y=0, relwidth=1, relheight=1)
-
-        self.log = Text(master, height=10, width=80, wrap="word", bg="#111111", fg="#00FF00", insertbackground="#00FF00")
-        self.log.grid(row=4, column=0, columnspan=2, padx=10, pady=5, sticky="nsew")
-
+        self.setup_background()
+        self.setup_log()
         self.setup_buttons()
         self.setup_agents()
         self.setup_text_areas()
+        self.setup_collaboration_manager()
 
-        self.agents = {
-            "FileManager": self.file_manager,
-            "IdeaGenerator": self.idea_gen,
-            "CodeCreator": self.code_creator,
-            "CodeExecutor": self.code_exec,
-            "CodeRefiner": self.code_refiner,
-            "AdaptiveScripter": self.adaptive_scripter,
-            "FeedbackGenerator": self.feedback_gen,
-            "CEO": self.CEO
-        }
-        
-        self.collaboration_manager = CollaborationManager(self.agents)
+    def setup_background(self):
+        self.background_image = PhotoImage(file="assets/background.png")
+        self.background_label = Label(self.master, image=self.background_image)
+        self.background_label.place(x=0, y=0, relwidth=1, relheight=1)
+
+    def setup_log(self):
+        self.log = Text(self.master, height=10, width=80, wrap="word", bg="#111111", fg="#00FF00", insertbackground="#00FF00")
+        self.log.grid(row=4, column=0, columnspan=2, padx=10, pady=5, sticky="nsew")
+
+    def setup_buttons(self):
+        button_frame = Frame(self.master, background="black")
+        button_frame.grid(row=3, column=0, columnspan=2, padx=10, pady=5, sticky="ew")
+
+        self.generate_idea_button = Button(button_frame, text="Generate Idea", command=self.generate_idea, bg="#111111", fg="#00FF00")
+        self.refine_code_button = Button(button_frame, text="Refine Code", command=self.refine_code, bg="#111111", fg="#00FF00")
+        self.save_final_code_button = Button(button_frame, text="Save Code", command=self.save_final_code, bg="#111111", fg="#00FF00")
+        self.auto_generate_button = Button(button_frame, text="Auto Generate", command=self.on_auto_generate_button_click, bg="#111111", fg="#00FF00")
+
+        self.generate_idea_button.pack(side="left", padx=5, pady=5)
+        self.refine_code_button.pack(side="left", padx=5, pady=5)
+        self.save_final_code_button.pack(side="left", padx=5, pady=5)
+        self.auto_generate_button.pack(side="left", padx=5, pady=5)
+
+    def setup_agents(self):
+        self.file_manager = FileManager()
+        self.idea_gen = IdeaGenerator()
+        self.code_creator = CodeCreator()
+        self.code_exec = CodeExecutor()
+        self.code_refiner = CodeRefiner()
+        self.adaptive_scripter = AdaptiveScripter()
+        self.feedback_gen = RefinementFeedbackGenerator()
+        self.CEO = CEO()
 
     def setup_text_areas(self):
         self.current_idea = ""
@@ -67,35 +85,18 @@ class Application:
         frame.grid(row=row, column=column, padx=10, pady=5, sticky="nsew")
         return text_widget, scrollbar
 
-    def setup_buttons(self):
-        button_frame = Frame(self.master, background="black")
-        button_frame.grid(row=3, column=0, columnspan=2, padx=10, pady=5, sticky="ew")
-
-        self.generate_idea_button = Button(button_frame, text="Generate Idea",
-                                           command=self.generate_idea, bg="#111111", fg="#00FF00")
-        self.refine_code_button = Button(button_frame, text="Refine Code",
-                                         command=self.refine_code, bg="#111111", fg="#00FF00")
-        self.save_final_code_button = Button(button_frame, text="Save Code",
-                                             command=self.save_final_code, bg="#111111", fg="#00FF00")
-        self.auto_generate_button = Button(button_frame, text="Auto Generate",
-                                           command=self.on_auto_generate_button_click, bg="#111111", fg="#00FF00")
-
-        self.generate_idea_button.pack(side="left", padx=5, pady=5)
-        self.refine_code_button.pack(side="left", padx=5, pady=5)
-        self.save_final_code_button.pack(side="left", padx=5, pady=5)
-        self.auto_generate_button.pack(side="left", padx=5, pady=5)
-
-    def setup_agents(self):
-        self.file_manager = FileManager()
-        self.idea_gen = IdeaGenerator()
-        self.code_creator = CodeCreator()
-        self.code_exec = CodeExecutor()
-        self.code_refiner = CodeRefiner()
-        self.adaptive_scripter = AdaptiveScripter()
-        self.feedback_gen = RefinementFeedbackGenerator()
-        self.CEO = CEO()
-
-
+    def setup_collaboration_manager(self):
+        self.agents = {
+            "FileManager": self.file_manager,
+            "IdeaGenerator": self.idea_gen,
+            "CodeCreator": self.code_creator,
+            "CodeExecutor": self.code_exec,
+            "CodeRefiner": self.code_refiner,
+            "AdaptiveScripter": self.adaptive_scripter,
+            "FeedbackGenerator": self.feedback_gen,
+            "CEO": self.CEO
+        }
+        self.collaboration_manager = CollaborationManager(self.agents)
 
     def log_message(self, message):
         self.log.insert(END, message + "\n")
@@ -105,8 +106,7 @@ class Application:
         threading.Thread(target=self._generate_idea_and_code).start()
 
     def _generate_idea_and_code(self):
-        # Perform web research before generating the idea
-        web_research_query = "AI-based project ideas for Python developers"
+        web_research_query = "AI-based project ideas for Python developers that automate profit generation using AI technologies."
         web_research_results = self.collaboration_manager.perform_web_research(web_research_query)
         self.log_message(f"Web Research Results: {web_research_results}")
 
@@ -147,7 +147,6 @@ class Application:
         threading.Thread(target=self._refine_and_execute_code, daemon=True).start()
 
     def _refine_and_execute_code(self):
-        # Generate feedback using the RefinementFeedbackGenerator before refining the code
         feedback = self.collaboration_manager.generate_feedback(self.current_code)
         self.current_feedback = feedback or ""
 
@@ -155,18 +154,17 @@ class Application:
         ceo_message = self.current_ceo_message or ""
         combined_feedback = f"{feedback} {ceo_message} + Here is the output of analysis: {self.current_code_output}".strip()
 
-        refined_code = self.collaboration_manager.refine_code(self.current_code, combined_feedback)
+        refined_code = self.collaboration_manager.refine_code(self.current_code, combined_feedback+f"current output analysis of the code:{self.current_code_output}")
         if refined_code:
             self.current_code = refined_code
 
-        # Generate and run a script using the AdaptiveScripter after refining the code
         script_task = "Perform data analysis on the generated code"
         script = self.collaboration_manager.generate_script(script_task)
         self.log_message(f"Generated Script: {script}")
         script_output = self.collaboration_manager.run_script(script)
         self.log_message(f"Script Output: {script_output}")
         
-        ceo_feedback = self.collaboration_manager.get_ceo_feedback("CodeRefiner", self.current_code, f"Current Output: {self.current_code_output}")
+        ceo_feedback = self.collaboration_manager.get_ceo_feedback("CodeRefiner", self.current_code, f"Current Output: {self.current_code_output}\nScript Output: {script_output}\n feedback: {combined_feedback} \n remember you are directly chatting with AI so be careful with your words.")
         self.current_ceo_message = ceo_feedback or ""
         self.update_gui_elements()
 
@@ -182,8 +180,8 @@ class Application:
         self.update_related_gui_elements()
         self.current_code_output = self.collaboration_manager.analyze_code(self.current_code)
 
-        # Use the FileManager to save the final code
         file_name = self.collaboration_manager.save_code(self.current_code)
+        self.file_name = file_name
         messagebox.showinfo("Info", f"Final code saved as {file_name}")
 
     def generate_feedback(self):
@@ -194,7 +192,7 @@ class Application:
         
         threading.Thread(target=self.generate_feedback).start()
         self.update_text_area(self.feedback_text, self.current_feedback)
-        self.current_ceo_message = self.collaboration_manager.get_ceo_feedback("CodeRefiner", self.current_feedback,
+        self.current_ceo_message = self.collaboration_manager.get_ceo_feedback("CodeRefiner", f"feedback agent response about the code:{self.current_feedback}",
                                                             self.current_code + f"Current Output: {self.current_code_output}")
         self.current_code_output = self.collaboration_manager.analyze_code(self.current_code)
         self.update_text_area(self.ceo_message, self.current_ceo_message)
@@ -239,6 +237,7 @@ class Application:
         if content_description:
             self.log_message(f"Updated '{content_description}': {content}")
 
+
 class CollaborationManager:
     def __init__(self, agents):
         self.agents = agents
@@ -248,6 +247,8 @@ class CollaborationManager:
     
     def get_ceo_feedback(self, agent_name, idea, code):
         return self.agents["CEO"].review_employee(agent_name, idea, code)
+    def get_true_false(self,code):
+        return self.agents["CEO"].is_code_ready(code)
     
     def generate_feedback(self, code):
         return self.agents["FeedbackGenerator"].generate_feedback(code)
@@ -260,8 +261,8 @@ class CollaborationManager:
 
     def perform_web_research(self, query):
         web_research = WebResearch()
-        web_research.search(query)
-        results = web_research.get_results()
+        web_research.search_google(query)
+        results = web_research.get_google_results()
         web_research.close()
         return results
 

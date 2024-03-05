@@ -2,7 +2,7 @@ from openai import OpenAI
 import json
 import time
 import difflib
-import tiktoken  # Assuming tiktoken is correctly installed and imported
+import tiktoken
 
 gpt3 = "gpt-3.5-turbo-16k"
 gpt4 = "gpt-4-0125-preview"
@@ -12,15 +12,15 @@ token_context_windows = {
 }
 
 class OpenAIAPI:
-    def __init__(self, model=gpt4, history_limit=5):
+    def __init__(self, model=gpt3, history_limit=10):
         self.openai = OpenAI()
         self.model = model
-        self.history = []  # Local cache to store history
-        self.history_limit = history_limit  # Limit the history size to manage memory efficiently
+        self.history = []
+        self.history_limit = history_limit
 
     def _add_to_history(self, user_message, sys_message, response):
         if len(self.history) >= self.history_limit:
-            self.history.pop(0)  # Remove the oldest entry
+            self.history.pop(0)
         self.history.append({
             "timestamp": time.time(),
             "user_message": user_message,
@@ -37,27 +37,31 @@ class OpenAIAPI:
             for entry in self.history
         ]
         relevant_entries = [entry for entry, score in similarity_scores if score > 0.5]
-        return relevant_entries[-5:]
+        return relevant_entries[-10:]  # Increase the number of relevant entries to 10
 
     def _ensure_token_limit(self, messages, model):
-        max_tokens = token_context_windows.get(model, 16000)  # Default to 16k if model not found
+        max_tokens = token_context_windows.get(model, 16000)
         total_tokens = num_tokens_from_messages(messages, model)
         while total_tokens > max_tokens:
-            messages.pop(0)  # Remove messages from the beginning to keep within token limit
+            messages.pop(0)
             total_tokens = num_tokens_from_messages(messages, model)
         return messages
 
-    def api_calls(self, user_message, sys_message):
+    def api_calls(self, user_message, sys_message, code_context=None):
         if not isinstance(user_message, str) or not isinstance(sys_message, str):
             raise ValueError("user_message and sys_message must be strings")
-
+        
         relevant_history = self._get_relevant_history(user_message)
-        messages = [{"role": "system", "content": sys_message}, {"role": "user", "content": user_message}] + \
-            [{"role": role, "content": entry[role + '_message']} for entry in relevant_history for role in ["system", "user"] if role + '_message' in entry]
-
-        # Ensure the total token count does not exceed the limit before making the API call
+        
+        messages = [{"role": "system", "content": sys_message}, {"role": "user", "content": user_message}]
+        
+        if code_context:
+            messages.insert(1, {"role": "system", "content": f"Code Context:\n{code_context}"})  # Add code context to the messages
+        
+        messages.extend([{"role": role, "content": entry[role + '_message']} for entry in relevant_history for role in ["system", "user"] if role + '_message' in entry])
+        
         messages = self._ensure_token_limit(messages, self.model)
-
+        
         try:
             response = self.openai.chat.completions.create(model=self.model, messages=messages, temperature=0)
             response_content = response.choices[0].message.content
@@ -79,10 +83,10 @@ def num_tokens_from_messages(messages, model="gpt-3.5-turbo-0613"):
         encoding = tiktoken.get_encoding("cl100k_base")
     num_tokens = 0
     for message in messages:
-        num_tokens += 4  # Account for the message structure tokens
+        num_tokens += 4
         for key, value in message.items():
             num_tokens += len(encoding.encode(value))
             if key == "name":
                 num_tokens -= 1
-    num_tokens += 2  # Final adjustment for message formatting
+        num_tokens += 2
     return num_tokens
