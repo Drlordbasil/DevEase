@@ -170,7 +170,7 @@ class Application:
             self.current_code = refined_code
 
         script_task = "Perform data analysis on the generated code"
-        script = self.collaboration_manager.generate_script(script_task)
+        script = self.collaboration_manager.generate_script(script_task, self.current_code, self.current_idea, self.current_ceo_message)
         self.log_message(f"Generated Script: {script}")
         script_output = self.collaboration_manager.run_script(script)
         self.log_message(f"Script Output: {script_output}")
@@ -178,7 +178,6 @@ class Application:
         ceo_feedback = self.collaboration_manager.get_ceo_feedback("CodeRefiner", self.current_code, f"Current Output: {self.current_code_output}\nScript Output: {script_output}\n feedback: {combined_feedback} \n remember you are directly chatting with AI so be careful with your words.")
         self.current_ceo_message = ceo_feedback or ""
         self.update_gui_elements()
-        self.enable_buttons()
 
     def update_gui_elements(self):
         self.update_text_area(self.feedback_text, self.current_feedback, "Current Feedback")
@@ -292,11 +291,11 @@ class CollaborationManager:
         web_research.close()
         return results
 
-    def generate_script(self, task):
-        return self.agents["AdaptiveScripter"].create_script(task)
+    def generate_script(self, task, code, idea, ceo_feedback):
+        return self.agents["AdaptiveScripter"].create_script(task, code, idea, ceo_feedback)
 
     def run_script(self, script):
-        return self.agents["AdaptiveScripter"].run_script(script)
+        return self.agents["AdaptiveScripter"].run_script(script, self.agents["CodeExecutor"].current_code_output)
 
     def save_code(self, code):
         return self.agents["FileManager"].save_mod_file(code)
