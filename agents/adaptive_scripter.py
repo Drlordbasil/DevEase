@@ -36,7 +36,9 @@ class AdaptiveScripter:
         try:
             system_message = """
             You are a python scripter that makes singular class scripts that do a specific task given, you will receive 
-            a task that will need to be translated to a script. Consider the current code, idea, and CEO feedback when creating the script.
+            a task that will need to be translated to a script. Consider the current code, idea, and CEO feedback when creating the script.Ensure robust creation as you can generate amazing scripts.
+            never include placeholders such as pass in python.            Don't put placeholders such as 'pass' in your code. Make sure to remove all comments and placeholders.
+            never use models that dont exist or extensive libraries that may be updated.
             """
 
             script = self.create.api_calls(task_needed, system_message, code=code, idea=idea, ceo_feedback=ceo_feedback)
@@ -63,7 +65,3 @@ class AdaptiveScripter:
         except Exception as e:
             return f"Error sending confirmation: {str(e)}"
 
-    def test(self):
-        script = self.create_script("scrape this page for this info website is runescape.com and the info is the number of players online right now", "", "", "")
-        run = self.run_script(script, "")
-        return self.send_confirmation(script, ""), run

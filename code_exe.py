@@ -82,5 +82,10 @@ class CodeExecutor:
         except IndexError as e:
             logging.error("Python code block not found in Markdown")
             return "Python code block not found in Markdown."
-
+    def current_code_output(self, code):
+        try:
+            result = subprocess.run(["python", "-c", code], capture_output=True, text=True, timeout=15)
+            return result.stdout
+        except Exception as e:
+            return f"Error running script: {str(e)}"
         
